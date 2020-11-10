@@ -1,4 +1,4 @@
-
+package youngNo.payment;
 public class Receive {
 	private static int id;
 	private String created_date;

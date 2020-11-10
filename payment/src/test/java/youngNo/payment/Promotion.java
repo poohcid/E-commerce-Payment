@@ -1,4 +1,4 @@
-
+package youngNo.payment;
 public class Promotion {
 	private static int id;
 	private int promotion_id;

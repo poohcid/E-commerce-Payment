@@ -1,4 +1,4 @@
-
+package youngNo.payment.Model;
 public class PaymentLog {
 	private static int id;
 	private String created_date;

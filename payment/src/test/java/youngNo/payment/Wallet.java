@@ -1,4 +1,4 @@
-
+package youngNo.payment;
 public class Wallet {
 	private static int id;
 	private double balance;
