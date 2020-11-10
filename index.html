@@ -7,26 +7,23 @@
         integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
     <title>SOP_Payment</title>
     <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 </head>
 
 <body>
-    <style>
-        body {
-            font-family: 'Mitr', sans-serif;
-        }
-    </style>
 
 
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="#">Payment นะ</a>
+        <a class="navbar-brand" href="index.html">Payment</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
             aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav" style="flex: 1; justify-content: flex-end;">
-                <a class="nav-link" href="#">ออเดอร์ที่ค้างชำระ</a>
-                <a class="nav-link" href="#">ประวัติการสั่งซื้อ</a>
+            <div class="navbar-nav" style="flex: 1; justify-content: flex-end; align-items: center;">
+                <a class="nav-link" href="unpaid.html">ออเดอร์ที่ค้างชำระ</a>
+                <a class="nav-link" href="record.html">ประวัติการสั่งซื้อ</a>
                 <h3>100 บาท</h3>
             </div>
         </div>
@@ -46,14 +43,16 @@
                     <th scope="row">1</th>
                     <td style="text-align: center;">order1</td>
                     <td style="text-align: center;">
-                        <a href="pay.html"><button type="button" class="btn btn-success">จ่ายเงิน</button></a>
+                        <a href="pay.html"><button type="button" class="btn btn-success"><i
+                                    class="fas fa-money-bill"></i> ชำระเงิน</button></a>
                     </td>
                 </tr>
                 <tr>
                     <th scope="row">2</th>
                     <td style="text-align: center;">order2</td>
                     <td style="text-align: center;">
-                        <a href="pay.html"><button type="button" class="btn btn-success">จ่ายเงิน</button></a>
+                        <a href="pay.html"><button type="button" class="btn btn-success"><i
+                                    class="fas fa-money-bill"></i> ชำระเงิน</button></a>
 
                     </td>
                 </tr>
@@ -61,7 +60,11 @@
                     <th scope="row">3</th>
                     <td style="text-align: center;">order3</td>
                     <td style="text-align: center;">
-                        <a href="pay.html"><button type="button" class="btn btn-success">จ่ายเงิน</button></a>
+                        <a href="pay.html">
+                            <button type="button" class="btn btn-success">
+                                <i class="fas fa-money-bill"></i> ชำระเงิน
+                            </button>
+                        </a>
                     </td>
                 </tr>
             </tbody>
