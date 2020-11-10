@@ -86,3 +86,11 @@
 2563-11-10 14:44:54,833 [Worker-28: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\LAB203\Desktop\E-commerce-Payment\payment\src\main\resources
 2563-11-10 14:44:54,834 [Worker-28: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
 2563-11-10 14:44:54,835 [Worker-28: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\LAB203\Desktop\E-commerce-Payment\payment\src\test\resources
+2563-11-10 14:52:28,012 [Worker-33: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2563-11-10 14:52:28,012 [Worker-33: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\LAB203\Desktop\E-commerce-Payment\payment\src\main\resources
+2563-11-10 14:52:28,013 [Worker-33: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2563-11-10 14:52:28,013 [Worker-33: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\LAB203\Desktop\E-commerce-Payment\payment\src\test\resources
+2563-11-10 14:53:59,633 [Worker-42: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2563-11-10 14:53:59,633 [Worker-42: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\LAB203\Desktop\E-commerce-Payment\payment\src\main\resources
+2563-11-10 14:53:59,633 [Worker-42: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2563-11-10 14:53:59,633 [Worker-42: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\LAB203\Desktop\E-commerce-Payment\payment\src\test\resources
