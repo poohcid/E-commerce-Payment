@@ -79,4 +79,10 @@ public class Controller {
 	public ResponseEntity<PaymentLog> postPaymentLog(@RequestBody PaymentLog paymentLog){
 		return new ResponseEntity<PaymentLog>(paymentLog, HttpStatus.OK);
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/receive")
+	public ResponseEntity<HashMap<Integer, ReceiveDB>> getReceiveAll(){
+		HashMap<Integer, ReceiveDB> receives = ReceiveDB.findAll();
+		return new ResponseEntity<HashMap<Integer, ReceiveDB>>(receives, HttpStatus.OK);
+	}
 }
