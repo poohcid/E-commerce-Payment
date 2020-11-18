@@ -25,7 +25,7 @@ public class FakeDatabase implements Serializable{
 	}
 	
 	public void addWallet(Wallet w) {
-		database.get("Wallets").put(w.getIdWallet(), w);
+		database.get("Wallets").put(w.getId(), w);
 	}
 	public Wallet getWallet(String id) {
 		return (Wallet) database.get("Wallets").get(id);

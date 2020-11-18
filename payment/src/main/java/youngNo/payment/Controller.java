@@ -16,10 +16,12 @@ import youngNo.payment.Database.*;
 public class Controller {
 	private SaveFakeDatabase fakeSave;
 	private FakeDatabase fakeDatabase;
+	private WalletDB walletDB;
 	
 	public Controller() {
 		fakeSave= new SaveFakeDatabase();
 		fakeDatabase = fakeSave.loadDatabase();
+		walletDB = new WalletDB();
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/")
@@ -35,10 +37,19 @@ public class Controller {
 	}
 	*/
 	@RequestMapping(method = RequestMethod.GET, value = "/wallet/{index}")
-	public ResponseEntity<WalletDB> getWallet(@PathVariable("index") int userId){
-		WalletDB wallet = WalletDB.findOne(userId);
-		return new ResponseEntity<WalletDB>(wallet, HttpStatus.OK);
+	public ResponseEntity<Wallet> getWallet(@PathVariable("index") int userId){
+		Wallet wallet = walletDB.findOne(userId);
+		return new ResponseEntity<Wallet>(wallet, HttpStatus.OK);
 	}
+	
+	@RequestMapping(method = RequestMethod.PUT, value = "/wallet/addBalance/")
+	public ResponseEntity<Wallet> addBalanceWallet(@RequestBody Wallet wallet){
+		Wallet updateWallet = walletDB.findOne(wallet.getUser_id());
+		updateWallet.addBalance(wallet.getBalance());
+		updateWallet.save();
+		return new ResponseEntity<Wallet>(updateWallet, HttpStatus.OK);
+	}
+	
 	@RequestMapping(method = RequestMethod.POST, value = "/wallet/create/")
 	public ResponseEntity<Wallet> postWallet(@RequestBody Wallet wallet){
 		fakeDatabase.addWallet(wallet);

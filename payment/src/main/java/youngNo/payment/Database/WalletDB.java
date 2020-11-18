@@ -7,21 +7,19 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 
+import youngNo.payment.Model.*;
+
 public class WalletDB extends ModelDB {
 	private double balance;
 	private int userId;
-
-	public WalletDB(int id, double balance, int userId) {
-		super(id);
-		this.setBalance(balance);
-		this.setUserId(userId);
-		// TODO Auto-generated constructor stub
+	
+	public WalletDB() {
 	}
 	
 	@SuppressWarnings("finally")
-	public static WalletDB findOne(int userId){
+	public Wallet findOne(int userId){
 		Connection conn = null;
-		WalletDB wallet = null;
+		Wallet wallet = null;
 		try {
 			conn = DriverManager.getConnection(url);
 			Statement stmt = conn.createStatement();
@@ -29,10 +27,10 @@ public class WalletDB extends ModelDB {
 			if (!result.next()) {
 				int id = stmt.executeUpdate("INSERT INTO Wallets (balance, user_id)"
 						+ String.format("VALUES (0.0, %d)", userId));
-				wallet = new WalletDB(id, 0.0, userId);
+				wallet = new Wallet(id, 0.0, userId);
 			}
 			else {
-				wallet = new WalletDB(result.getInt("id"), result.getFloat("balance"), result.getInt("user_id"));
+				wallet = new Wallet(result.getInt("id"), result.getFloat("balance"), result.getInt("user_id"));
 			}
 			conn.close();
 			return wallet;

@@ -12,7 +12,6 @@ public class ReceiveDB extends ModelDB{
 	private int orderId;
 	
 	public ReceiveDB(int id, String createDate, int orderId) {
-		super(id);
 		this.createDate = createDate;
 		this.orderId = orderId;
 	}
