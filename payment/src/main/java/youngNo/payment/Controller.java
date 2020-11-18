@@ -26,12 +26,18 @@ public class Controller {
 	public String sayHello() {
 		return "Payment";
 	}
-	
+	/*
 	@RequestMapping(method = RequestMethod.GET, value = "/wallet/{index}")
 	public ResponseEntity<Wallet> getWallet(@PathVariable("index") String index){
 		fakeDatabase = fakeSave.loadDatabase();
 		Wallet w = fakeDatabase.getWallet(index);
 		return new ResponseEntity<Wallet>(w, HttpStatus.OK);
+	}
+	*/
+	@RequestMapping(method = RequestMethod.GET, value = "/wallet/{index}")
+	public ResponseEntity<WalletDB> getWallet(@PathVariable("index") int userId){
+		WalletDB wallet = WalletDB.findOne(userId);
+		return new ResponseEntity<WalletDB>(wallet, HttpStatus.OK);
 	}
 	@RequestMapping(method = RequestMethod.POST, value = "/wallet/create/")
 	public ResponseEntity<Wallet> postWallet(@RequestBody Wallet wallet){

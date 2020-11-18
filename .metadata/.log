@@ -582,3 +582,774 @@ java.lang.Exception: A resource exists with a different case: '/payment/src/main
 	at org.eclipse.core.internal.resources.Workspace.run(Workspace.java:2317)
 	at org.eclipse.ltk.internal.ui.refactoring.WorkbenchRunnableAdapter.run(WorkbenchRunnableAdapter.java:89)
 	at org.eclipse.jface.operation.ModalContext$ModalContextThread.run(ModalContext.java:122)
+!SESSION 2020-11-18 21:46:06.583 -----------------------------------------------
+eclipse.buildId=4.16.0.I20200604-0540
+java.version=14.0.2
+java.vendor=Oracle Corporation
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.jface 2 0 2020-11-18 21:46:27.766
+!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
+!SUBENTRY 1 org.eclipse.jface 2 0 2020-11-18 21:46:27.766
+!MESSAGE A conflict occurred for CTRL+SHIFT+T:
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.jdt.ui.navigate.open.type,Open Type,
+		Open a type in a Java editor,
+		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@7be62956,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.lsp4e.symbolinworkspace,Go to Symbol in Workspace,
+		,
+		Category(org.eclipse.lsp4e.category,Language Servers,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@30e143ff,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.ui.contexts.window,,,system)
+
+!ENTRY org.eclipse.egit.ui 2 0 2020-11-18 21:46:48.025
+!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
+user global configuration and to define the default location to store repositories: 'C:\Users\pooh'. If this is
+not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
+EGit might behave differently since they see different configuration options.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.jdt.core 4 4 2020-11-18 22:07:34.442
+!MESSAGE Exception occurred during compilation unit conversion:
+----------------------------------- SOURCE BEGIN -------------------------------------
+package youngNo.payment;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import youngNo.payment.Model.*;
+import java.util.HashMap;
+import youngNo.payment.Database.*;
+
+@RestController
+public class Controller {
+	private SaveFakeDatabase fakeSave;
+	private FakeDatabase fakeDatabase;
+	
+	public Controller() {
+		fakeSave= new SaveFakeDatabase();
+		fakeDatabase = fakeSave.loadDatabase();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/")
+	public String sayHello() {
+		return "Payment";
+	}
+	/*
+	@RequestMapping(method = RequestMethod.GET, value = "/wallet/{index}")
+	public ResponseEntity<Wallet> getWallet(@PathVariable("index") String index){
+		fakeDatabase = fakeSave.loadDatabase();
+		Wallet w = fakeDatabase.getWallet(index);
+		return new ResponseEntity<Wallet>(w, HttpStatus.OK);
+	}
+	*/
+	
+	public ResponseEntity<WalletDB> getWallet()
+	@RequestMapping(method = RequestMethod.POST, value = "/wallet/create/")
+	public ResponseEntity<Wallet> postWallet(@RequestBody Wallet wallet){
+		fakeDatabase.addWallet(wallet);
+		fakeSave.saveData(fakeDatabase);
+		return new ResponseEntity<Wallet>(wallet, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/promotion/{index}")
+	public ResponseEntity<Promotion> getPromotion(@PathVariable("index") String index){
+		Promotion w = new Promotion(1, 1);
+		return new ResponseEntity<Promotion>(w, HttpStatus.OK);
+	}
+	@RequestMapping(method = RequestMethod.POST, value = "/promotion/create/")
+	public ResponseEntity<Promotion> postPromotion(@RequestBody Promotion promotion){
+		return new ResponseEntity<Promotion>(promotion, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/receive/{index}")
+	public ResponseEntity<Receive> getReceive(@PathVariable("index") String index){
+		Receive w = new Receive("1", 1);
+		return new ResponseEntity<Receive>(w, HttpStatus.OK);
+	}
+	@RequestMapping(method = RequestMethod.POST, value = "/receive/create/")
+	public ResponseEntity<Receive> postReceive(@RequestBody Receive receive){
+		return new ResponseEntity<Receive>(receive, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/refunding/{index}")
+	public ResponseEntity<Refunding> getRefunding(@PathVariable("index") String index){
+		Refunding w = new Refunding("1", 1);
+		return new ResponseEntity<Refunding>(w, HttpStatus.OK);
+	}
+	@RequestMapping(method = RequestMethod.POST, value = "/refunding/create/")
+	public ResponseEntity<Refunding> postRefunding(@RequestBody Refunding refunding){
+		return new ResponseEntity<Refunding>(refunding, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/paymentLog/{index}")
+	public ResponseEntity<PaymentLog> getPaymentLog(@PathVariable("index") String index){
+		PaymentLog w = new PaymentLog("1", 1, 1);
+		return new ResponseEntity<PaymentLog>(w, HttpStatus.OK);
+	}
+	@RequestMapping(method = RequestMethod.POST, value = "/paymentLog/create/")
+	public ResponseEntity<PaymentLog> postPaymentLog(@RequestBody PaymentLog paymentLog){
+		return new ResponseEntity<PaymentLog>(paymentLog, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/receive")
+	public ResponseEntity<HashMap<Integer, ReceiveDB>> getReceiveAll(){
+		HashMap<Integer, ReceiveDB> receives = ReceiveDB.findAll();
+		return new ResponseEntity<HashMap<Integer, ReceiveDB>>(receives, HttpStatus.OK);
+	}
+}
+
+----------------------------------- SOURCE END -------------------------------------
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.ASTNode.setSourceRange(ASTNode.java:3105)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:725)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3302)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1513)
+	at org.eclipse.jdt.core.dom.AST.convertCompilationUnit(AST.java:450)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:200)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:268)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:596)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1138)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:736)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:802)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1315)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:157)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:76)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:210)
+
+!ENTRY org.eclipse.jdt.ui 4 2 2020-11-18 22:07:34.502
+!MESSAGE Problems occurred when invoking code from plug-in: "org.eclipse.jdt.ui".
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.ASTNode.setSourceRange(ASTNode.java:3105)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:725)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3302)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1513)
+	at org.eclipse.jdt.core.dom.AST.convertCompilationUnit(AST.java:450)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:200)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:268)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:596)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1138)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:736)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:802)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1315)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:157)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:76)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:210)
+
+!ENTRY org.eclipse.jdt.ui 4 0 2020-11-18 22:07:34.523
+!MESSAGE Error in JDT Core during reconcile
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.ASTNode.setSourceRange(ASTNode.java:3105)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:725)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3302)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1513)
+	at org.eclipse.jdt.core.dom.AST.convertCompilationUnit(AST.java:450)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:200)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:268)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:596)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1138)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:736)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:802)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1315)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:157)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:76)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:210)
+
+!ENTRY org.eclipse.jdt.core 4 4 2020-11-18 22:07:41.073
+!MESSAGE Exception occurred during compilation unit conversion:
+----------------------------------- SOURCE BEGIN -------------------------------------
+package youngNo.payment;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import youngNo.payment.Model.*;
+import java.util.HashMap;
+import youngNo.payment.Database.*;
+
+@RestController
+public class Controller {
+	private SaveFakeDatabase fakeSave;
+	private FakeDatabase fakeDatabase;
+	
+	public Controller() {
+		fakeSave= new SaveFakeDatabase();
+		fakeDatabase = fakeSave.loadDatabase();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/")
+	public String sayHello() {
+		return "Payment";
+	}
+	/*
+	@RequestMapping(method = RequestMethod.GET, value = "/wallet/{index}")
+	public ResponseEntity<Wallet> getWallet(@PathVariable("index") String index){
+		fakeDatabase = fakeSave.loadDatabase();
+		Wallet w = fakeDatabase.getWallet(index);
+		return new ResponseEntity<Wallet>(w, HttpStatus.OK);
+	}
+	*/
+	@RequestMapping(method = RequestMethod.GET, value = "/wallet/{index}")
+	public ResponseEntity<WalletDB> getWallet()
+	@RequestMapping(method = RequestMethod.POST, value = "/wallet/create/")
+	public ResponseEntity<Wallet> postWallet(@RequestBody Wallet wallet){
+		fakeDatabase.addWallet(wallet);
+		fakeSave.saveData(fakeDatabase);
+		return new ResponseEntity<Wallet>(wallet, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/promotion/{index}")
+	public ResponseEntity<Promotion> getPromotion(@PathVariable("index") String index){
+		Promotion w = new Promotion(1, 1);
+		return new ResponseEntity<Promotion>(w, HttpStatus.OK);
+	}
+	@RequestMapping(method = RequestMethod.POST, value = "/promotion/create/")
+	public ResponseEntity<Promotion> postPromotion(@RequestBody Promotion promotion){
+		return new ResponseEntity<Promotion>(promotion, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/receive/{index}")
+	public ResponseEntity<Receive> getReceive(@PathVariable("index") String index){
+		Receive w = new Receive("1", 1);
+		return new ResponseEntity<Receive>(w, HttpStatus.OK);
+	}
+	@RequestMapping(method = RequestMethod.POST, value = "/receive/create/")
+	public ResponseEntity<Receive> postReceive(@RequestBody Receive receive){
+		return new ResponseEntity<Receive>(receive, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/refunding/{index}")
+	public ResponseEntity<Refunding> getRefunding(@PathVariable("index") String index){
+		Refunding w = new Refunding("1", 1);
+		return new ResponseEntity<Refunding>(w, HttpStatus.OK);
+	}
+	@RequestMapping(method = RequestMethod.POST, value = "/refunding/create/")
+	public ResponseEntity<Refunding> postRefunding(@RequestBody Refunding refunding){
+		return new ResponseEntity<Refunding>(refunding, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/paymentLog/{index}")
+	public ResponseEntity<PaymentLog> getPaymentLog(@PathVariable("index") String index){
+		PaymentLog w = new PaymentLog("1", 1, 1);
+		return new ResponseEntity<PaymentLog>(w, HttpStatus.OK);
+	}
+	@RequestMapping(method = RequestMethod.POST, value = "/paymentLog/create/")
+	public ResponseEntity<PaymentLog> postPaymentLog(@RequestBody PaymentLog paymentLog){
+		return new ResponseEntity<PaymentLog>(paymentLog, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/receive")
+	public ResponseEntity<HashMap<Integer, ReceiveDB>> getReceiveAll(){
+		HashMap<Integer, ReceiveDB> receives = ReceiveDB.findAll();
+		return new ResponseEntity<HashMap<Integer, ReceiveDB>>(receives, HttpStatus.OK);
+	}
+}
+
+----------------------------------- SOURCE END -------------------------------------
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.ASTNode.setSourceRange(ASTNode.java:3105)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:725)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3302)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1513)
+	at org.eclipse.jdt.core.dom.AST.convertCompilationUnit(AST.java:450)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:200)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:268)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:596)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1138)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:736)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:802)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1315)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:157)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:76)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:210)
+
+!ENTRY org.eclipse.jdt.ui 4 2 2020-11-18 22:07:41.123
+!MESSAGE Problems occurred when invoking code from plug-in: "org.eclipse.jdt.ui".
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.ASTNode.setSourceRange(ASTNode.java:3105)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:725)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3302)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1513)
+	at org.eclipse.jdt.core.dom.AST.convertCompilationUnit(AST.java:450)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:200)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:268)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:596)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1138)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:736)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:802)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1315)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:157)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:76)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:210)
+
+!ENTRY org.eclipse.jdt.ui 4 0 2020-11-18 22:07:41.143
+!MESSAGE Error in JDT Core during reconcile
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.ASTNode.setSourceRange(ASTNode.java:3105)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:725)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3302)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1513)
+	at org.eclipse.jdt.core.dom.AST.convertCompilationUnit(AST.java:450)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:200)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:268)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:596)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1138)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:736)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:802)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1315)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:157)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:76)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:210)
+
+!ENTRY org.eclipse.jdt.core 4 4 2020-11-18 22:08:09.215
+!MESSAGE Exception occurred during compilation unit conversion:
+----------------------------------- SOURCE BEGIN -------------------------------------
+package youngNo.payment;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import youngNo.payment.Model.*;
+import java.util.HashMap;
+import youngNo.payment.Database.*;
+
+@RestController
+public class Controller {
+	private SaveFakeDatabase fakeSave;
+	private FakeDatabase fakeDatabase;
+	
+	public Controller() {
+		fakeSave= new SaveFakeDatabase();
+		fakeDatabase = fakeSave.loadDatabase();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/")
+	public String sayHello() {
+		return "Payment";
+	}
+	/*
+	@RequestMapping(method = RequestMethod.GET, value = "/wallet/{index}")
+	public ResponseEntity<Wallet> getWallet(@PathVariable("index") String index){
+		fakeDatabase = fakeSave.loadDatabase();
+		Wallet w = fakeDatabase.getWallet(index);
+		return new ResponseEntity<Wallet>(w, HttpStatus.OK);
+	}
+	*/
+	@RequestMapping(method = RequestMethod.GET, value = "/wallet/{index}")
+	public ResponseEntity<WalletDB> getWallet(@PathVariable("index") String index)
+	@RequestMapping(method = RequestMethod.POST, value = "/wallet/create/")
+	public ResponseEntity<Wallet> postWallet(@RequestBody Wallet wallet){
+		fakeDatabase.addWallet(wallet);
+		fakeSave.saveData(fakeDatabase);
+		return new ResponseEntity<Wallet>(wallet, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/promotion/{index}")
+	public ResponseEntity<Promotion> getPromotion(@PathVariable("index") String index){
+		Promotion w = new Promotion(1, 1);
+		return new ResponseEntity<Promotion>(w, HttpStatus.OK);
+	}
+	@RequestMapping(method = RequestMethod.POST, value = "/promotion/create/")
+	public ResponseEntity<Promotion> postPromotion(@RequestBody Promotion promotion){
+		return new ResponseEntity<Promotion>(promotion, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/receive/{index}")
+	public ResponseEntity<Receive> getReceive(@PathVariable("index") String index){
+		Receive w = new Receive("1", 1);
+		return new ResponseEntity<Receive>(w, HttpStatus.OK);
+	}
+	@RequestMapping(method = RequestMethod.POST, value = "/receive/create/")
+	public ResponseEntity<Receive> postReceive(@RequestBody Receive receive){
+		return new ResponseEntity<Receive>(receive, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/refunding/{index}")
+	public ResponseEntity<Refunding> getRefunding(@PathVariable("index") String index){
+		Refunding w = new Refunding("1", 1);
+		return new ResponseEntity<Refunding>(w, HttpStatus.OK);
+	}
+	@RequestMapping(method = RequestMethod.POST, value = "/refunding/create/")
+	public ResponseEntity<Refunding> postRefunding(@RequestBody Refunding refunding){
+		return new ResponseEntity<Refunding>(refunding, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/paymentLog/{index}")
+	public ResponseEntity<PaymentLog> getPaymentLog(@PathVariable("index") String index){
+		PaymentLog w = new PaymentLog("1", 1, 1);
+		return new ResponseEntity<PaymentLog>(w, HttpStatus.OK);
+	}
+	@RequestMapping(method = RequestMethod.POST, value = "/paymentLog/create/")
+	public ResponseEntity<PaymentLog> postPaymentLog(@RequestBody PaymentLog paymentLog){
+		return new ResponseEntity<PaymentLog>(paymentLog, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/receive")
+	public ResponseEntity<HashMap<Integer, ReceiveDB>> getReceiveAll(){
+		HashMap<Integer, ReceiveDB> receives = ReceiveDB.findAll();
+		return new ResponseEntity<HashMap<Integer, ReceiveDB>>(receives, HttpStatus.OK);
+	}
+}
+
+----------------------------------- SOURCE END -------------------------------------
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.ASTNode.setSourceRange(ASTNode.java:3105)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:725)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3302)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1513)
+	at org.eclipse.jdt.core.dom.AST.convertCompilationUnit(AST.java:450)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:200)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:268)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:596)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1138)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:736)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:802)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1315)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:157)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:76)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:210)
+
+!ENTRY org.eclipse.jdt.ui 4 2 2020-11-18 22:08:09.263
+!MESSAGE Problems occurred when invoking code from plug-in: "org.eclipse.jdt.ui".
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.ASTNode.setSourceRange(ASTNode.java:3105)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:725)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3302)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1513)
+	at org.eclipse.jdt.core.dom.AST.convertCompilationUnit(AST.java:450)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:200)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:268)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:596)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1138)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:736)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:802)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1315)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:157)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:76)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:210)
+
+!ENTRY org.eclipse.jdt.ui 4 0 2020-11-18 22:08:09.294
+!MESSAGE Error in JDT Core during reconcile
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.ASTNode.setSourceRange(ASTNode.java:3105)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:725)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3302)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1513)
+	at org.eclipse.jdt.core.dom.AST.convertCompilationUnit(AST.java:450)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:200)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:268)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:596)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1138)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:736)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:802)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1315)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:157)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:76)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:210)
+
+!ENTRY org.eclipse.jdt.core 4 4 2020-11-18 22:08:13.345
+!MESSAGE Exception occurred during compilation unit conversion:
+----------------------------------- SOURCE BEGIN -------------------------------------
+package youngNo.payment;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+
+import youngNo.payment.Model.*;
+import java.util.HashMap;
+import youngNo.payment.Database.*;
+
+@RestController
+public class Controller {
+	private SaveFakeDatabase fakeSave;
+	private FakeDatabase fakeDatabase;
+	
+	public Controller() {
+		fakeSave= new SaveFakeDatabase();
+		fakeDatabase = fakeSave.loadDatabase();
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/")
+	public String sayHello() {
+		return "Payment";
+	}
+	/*
+	@RequestMapping(method = RequestMethod.GET, value = "/wallet/{index}")
+	public ResponseEntity<Wallet> getWallet(@PathVariable("index") String index){
+		fakeDatabase = fakeSave.loadDatabase();
+		Wallet w = fakeDatabase.getWallet(index);
+		return new ResponseEntity<Wallet>(w, HttpStatus.OK);
+	}
+	*/
+	@RequestMapping(method = RequestMethod.GET, value = "/wallet/{index}")
+	public ResponseEntity<WalletDB> getWallet(@PathVariable("index") int index)
+	@RequestMapping(method = RequestMethod.POST, value = "/wallet/create/")
+	public ResponseEntity<Wallet> postWallet(@RequestBody Wallet wallet){
+		fakeDatabase.addWallet(wallet);
+		fakeSave.saveData(fakeDatabase);
+		return new ResponseEntity<Wallet>(wallet, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/promotion/{index}")
+	public ResponseEntity<Promotion> getPromotion(@PathVariable("index") String index){
+		Promotion w = new Promotion(1, 1);
+		return new ResponseEntity<Promotion>(w, HttpStatus.OK);
+	}
+	@RequestMapping(method = RequestMethod.POST, value = "/promotion/create/")
+	public ResponseEntity<Promotion> postPromotion(@RequestBody Promotion promotion){
+		return new ResponseEntity<Promotion>(promotion, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/receive/{index}")
+	public ResponseEntity<Receive> getReceive(@PathVariable("index") String index){
+		Receive w = new Receive("1", 1);
+		return new ResponseEntity<Receive>(w, HttpStatus.OK);
+	}
+	@RequestMapping(method = RequestMethod.POST, value = "/receive/create/")
+	public ResponseEntity<Receive> postReceive(@RequestBody Receive receive){
+		return new ResponseEntity<Receive>(receive, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/refunding/{index}")
+	public ResponseEntity<Refunding> getRefunding(@PathVariable("index") String index){
+		Refunding w = new Refunding("1", 1);
+		return new ResponseEntity<Refunding>(w, HttpStatus.OK);
+	}
+	@RequestMapping(method = RequestMethod.POST, value = "/refunding/create/")
+	public ResponseEntity<Refunding> postRefunding(@RequestBody Refunding refunding){
+		return new ResponseEntity<Refunding>(refunding, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/paymentLog/{index}")
+	public ResponseEntity<PaymentLog> getPaymentLog(@PathVariable("index") String index){
+		PaymentLog w = new PaymentLog("1", 1, 1);
+		return new ResponseEntity<PaymentLog>(w, HttpStatus.OK);
+	}
+	@RequestMapping(method = RequestMethod.POST, value = "/paymentLog/create/")
+	public ResponseEntity<PaymentLog> postPaymentLog(@RequestBody PaymentLog paymentLog){
+		return new ResponseEntity<PaymentLog>(paymentLog, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/receive")
+	public ResponseEntity<HashMap<Integer, ReceiveDB>> getReceiveAll(){
+		HashMap<Integer, ReceiveDB> receives = ReceiveDB.findAll();
+		return new ResponseEntity<HashMap<Integer, ReceiveDB>>(receives, HttpStatus.OK);
+	}
+}
+
+----------------------------------- SOURCE END -------------------------------------
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.ASTNode.setSourceRange(ASTNode.java:3105)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:725)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3302)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1513)
+	at org.eclipse.jdt.core.dom.AST.convertCompilationUnit(AST.java:450)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:200)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:268)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:596)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1138)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:736)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:802)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1315)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:157)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:76)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:210)
+
+!ENTRY org.eclipse.jdt.ui 4 2 2020-11-18 22:08:13.396
+!MESSAGE Problems occurred when invoking code from plug-in: "org.eclipse.jdt.ui".
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.ASTNode.setSourceRange(ASTNode.java:3105)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:725)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3302)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1513)
+	at org.eclipse.jdt.core.dom.AST.convertCompilationUnit(AST.java:450)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:200)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:268)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:596)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1138)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:736)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:802)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1315)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:157)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:76)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:210)
+
+!ENTRY org.eclipse.jdt.ui 4 0 2020-11-18 22:08:13.419
+!MESSAGE Error in JDT Core during reconcile
+!STACK 0
+java.lang.IllegalArgumentException
+	at org.eclipse.jdt.core.dom.ASTNode.setSourceRange(ASTNode.java:3105)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:725)
+	at org.eclipse.jdt.core.dom.ASTConverter.buildBodyDeclarations(ASTConverter.java:208)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:3302)
+	at org.eclipse.jdt.core.dom.ASTConverter.convert(ASTConverter.java:1513)
+	at org.eclipse.jdt.core.dom.AST.convertCompilationUnit(AST.java:450)
+	at org.eclipse.jdt.internal.core.CompilationUnit.buildStructure(CompilationUnit.java:200)
+	at org.eclipse.jdt.internal.core.Openable.generateInfos(Openable.java:268)
+	at org.eclipse.jdt.internal.core.JavaElement.openWhenClosed(JavaElement.java:596)
+	at org.eclipse.jdt.internal.core.CompilationUnit.makeConsistent(CompilationUnit.java:1138)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.makeConsistent(ReconcileWorkingCopyOperation.java:173)
+	at org.eclipse.jdt.internal.core.ReconcileWorkingCopyOperation.executeOperation(ReconcileWorkingCopyOperation.java:94)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.run(JavaModelOperation.java:736)
+	at org.eclipse.jdt.internal.core.JavaModelOperation.runOperation(JavaModelOperation.java:802)
+	at org.eclipse.jdt.internal.core.CompilationUnit.reconcile(CompilationUnit.java:1315)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:131)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.access$0(JavaReconcilingStrategy.java:113)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy$1.run(JavaReconcilingStrategy.java:93)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:45)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:90)
+	at org.eclipse.jdt.internal.ui.text.java.JavaReconcilingStrategy.reconcile(JavaReconcilingStrategy.java:157)
+	at org.eclipse.jdt.internal.ui.text.CompositeReconcilingStrategy.reconcile(CompositeReconcilingStrategy.java:94)
+	at org.eclipse.jdt.internal.ui.text.JavaCompositeReconcilingStrategy.reconcile(JavaCompositeReconcilingStrategy.java:107)
+	at org.eclipse.jface.text.reconciler.MonoReconciler.process(MonoReconciler.java:76)
+	at org.eclipse.jface.text.reconciler.AbstractReconciler$BackgroundThread.run(AbstractReconciler.java:210)
