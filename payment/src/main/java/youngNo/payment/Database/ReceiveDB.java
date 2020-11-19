@@ -7,9 +7,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 
+import youngNo.payment.Model.*;
+
 public class ReceiveDB extends ModelDB{
 	private String createDate;
 	private int orderId;
+	
+	public ReceiveDB() {
+		
+	}
 	
 	public ReceiveDB(int id, String createDate, int orderId) {
 		this.createDate = createDate;
@@ -17,15 +23,15 @@ public class ReceiveDB extends ModelDB{
 	}
 	
 	@SuppressWarnings("finally")
-	public static HashMap<Integer, ReceiveDB> findAll(){
+	public HashMap<Integer, Receive> findAll(){
 		Connection conn = null;
-		HashMap<Integer, ReceiveDB> receives = new HashMap<Integer, ReceiveDB>();
+		HashMap<Integer, Receive> receives = new HashMap<Integer, Receive>();
 		try {
 			conn = DriverManager.getConnection(url);
 			Statement stmt = conn.createStatement();
-			ResultSet result = stmt.executeQuery("SELECT * FROM Receives");
+			ResultSet result = stmt.executeQuery("SELECT * FROM Receive");
 			while (result.next()) {
-				receives.put(result.getInt("id"), new ReceiveDB(result.getInt("id"), result.getString("create_date"), result.getInt("order_id")));
+				receives.put(result.getInt("id"), new Receive(result.getInt("id"), result.getString("create_date"), result.getInt("order_id")));
 			}
 			conn.close();
 			return receives;
@@ -34,6 +40,32 @@ public class ReceiveDB extends ModelDB{
 			e.printStackTrace();
 		} finally {
 			return receives;
+		}
+	}
+	
+	@SuppressWarnings("finally")
+	public Receive findByOrderId(int orderId) {
+		Connection conn = null;
+		Receive receive = null;
+		String whereQuery = String.format(" order_id=%d ", orderId);
+		try {
+			conn = DriverManager.getConnection(url);
+			Statement stmt = conn.createStatement();
+			ResultSet result = stmt.executeQuery("SELECT * FROM Receive "
+					+ "WHERE "+whereQuery);
+			if (!result.next()) {
+				stmt.executeUpdate("INSERT INTO Receive (order_id) "
+						+ String.format(" VALUES (%d) ", orderId));
+				result = stmt.executeQuery("SELECT * FROM Receive "
+						+ "WHERE "+whereQuery);
+			}
+			receive = new Receive(result.getInt("id"), result.getString("create_date"), result.getInt("order_id"));
+			conn.close();
+			return receive;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally {
+			return receive;
 		}
 	}
 

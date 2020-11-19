@@ -23,9 +23,9 @@ public class WalletDB extends ModelDB {
 		try {
 			conn = DriverManager.getConnection(url);
 			Statement stmt = conn.createStatement();
-			ResultSet result = stmt.executeQuery("SELECT * FROM Wallets WHERE user_id="+userId);
+			ResultSet result = stmt.executeQuery("SELECT * FROM Wallet WHERE user_id="+userId);
 			if (!result.next()) {
-				int id = stmt.executeUpdate("INSERT INTO Wallets (balance, user_id)"
+				int id = stmt.executeUpdate("INSERT INTO Wallet (balance, user_id)"
 						+ String.format("VALUES (0.0, %d)", userId));
 				wallet = new Wallet(id, 0.0, userId);
 			}

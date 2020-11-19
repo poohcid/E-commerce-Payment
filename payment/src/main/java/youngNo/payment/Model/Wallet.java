@@ -22,7 +22,7 @@ public class Wallet extends Model{
 	
 	@Override
 	protected void saveHandle(Statement stmt) throws SQLException {
-		stmt.executeUpdate("UPDATE Wallets "
+		stmt.executeUpdate("UPDATE Wallet "
 				+ String.format("SET balance = %.2f ", this.balance)
 				+ String.format("WHERE user_id=%d AND id=%d ", user_id, id));
 	}

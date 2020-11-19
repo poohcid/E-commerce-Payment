@@ -1,18 +1,24 @@
 package youngNo.payment.Model;
-public class Receive {
-	private static int id;
+
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+
+public class Receive extends Model{
+	private int id;
 	private String created_date;
 	private int order_id;
+	private ArrayList<Promotion> promotions;
 	
-	
-	public Receive(String created_date, int order_id) {
+	public Receive(int id, String created_date, int order_id) {
+		this.id = id;
 		this.setOrder_id(order_id);
-		this.setCreated_date(created_date);
-		countId();
+		this.created_date = created_date;
+		this.promotions = new ArrayList<Promotion>();
 	}
 	
-	private static void countId() {
-		Receive.id++;
+	public Receive(int id, int order_id) {
+		this(id, null, order_id);
 	}
 
 	public int getOrder_id() {
@@ -27,7 +33,16 @@ public class Receive {
 		return created_date;
 	}
 
-	public void setCreated_date(String created_date) {
-		this.created_date = created_date;
+	public int getId() {
+		return id;
+	}
+
+	@Override
+	protected void saveHandle(Statement stmt) throws SQLException {
+		
+	}
+
+	public ArrayList<Promotion> getPromotions() {
+		return promotions;
 	}
 }

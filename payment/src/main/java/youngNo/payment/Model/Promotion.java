@@ -1,18 +1,35 @@
 package youngNo.payment.Model;
-public class Promotion {
-	private static int id;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import youngNo.payment.ModelForm.PromotionForm;
+
+public class Promotion extends Model{
+	private int id;
 	private int promotion_id;
 	private int receive_id;
 	
-	
-	public Promotion(int promotion_id, int receive_id) {
+	public Promotion(int id, int promotion_id, int receive_id) {
+		this.id = id;
 		this.setReceive_id(receive_id);
 		this.setPromotion_id(promotion_id);
-		countId();
 	}
 	
-	private static void countId() {
-		Promotion.id++;
+	public static void addPromotion(int promotion_id, int receive_id) {
+		Connection conn = null;
+		try {
+			conn = DriverManager.getConnection(url);
+			Statement stmt = conn.createStatement();
+			stmt.executeUpdate("INSERT INTO PromotionUsing (promotion_id, receive_id) "
+					+ String.format(" VALUES (%d, %d) ",promotion_id, receive_id));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public int getPromotion_id() {
@@ -29,5 +46,14 @@ public class Promotion {
 
 	public void setReceive_id(int receive_id) {
 		this.receive_id = receive_id;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	@Override
+	protected void saveHandle(Statement stmt) throws SQLException {
+		
 	}
 }

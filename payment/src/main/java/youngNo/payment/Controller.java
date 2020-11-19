@@ -7,8 +7,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import youngNo.payment.Model.*;
+import youngNo.payment.ModelForm.*;
 import java.util.HashMap;
 import youngNo.payment.Database.*;
 
@@ -17,25 +17,20 @@ public class Controller {
 	private SaveFakeDatabase fakeSave;
 	private FakeDatabase fakeDatabase;
 	private WalletDB walletDB;
+	private ReceiveDB receiveDB;
 	
 	public Controller() {
 		fakeSave= new SaveFakeDatabase();
 		fakeDatabase = fakeSave.loadDatabase();
 		walletDB = new WalletDB();
+		receiveDB = new ReceiveDB();
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/")
 	public String sayHello() {
 		return "Payment";
 	}
-	/*
-	@RequestMapping(method = RequestMethod.GET, value = "/wallet/{index}")
-	public ResponseEntity<Wallet> getWallet(@PathVariable("index") String index){
-		fakeDatabase = fakeSave.loadDatabase();
-		Wallet w = fakeDatabase.getWallet(index);
-		return new ResponseEntity<Wallet>(w, HttpStatus.OK);
-	}
-	*/
+
 	@RequestMapping(method = RequestMethod.GET, value = "/wallet/{index}")
 	public ResponseEntity<Wallet> getWallet(@PathVariable("index") int userId){
 		Wallet wallet = walletDB.findOne(userId);
@@ -57,21 +52,19 @@ public class Controller {
 		return new ResponseEntity<Wallet>(wallet, HttpStatus.OK);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/promotion/{index}")
-	public ResponseEntity<Promotion> getPromotion(@PathVariable("index") String index){
-		Promotion w = new Promotion(1, 1);
-		return new ResponseEntity<Promotion>(w, HttpStatus.OK);
-	}
 	@RequestMapping(method = RequestMethod.POST, value = "/promotion/create/")
 	public ResponseEntity<Promotion> postPromotion(@RequestBody Promotion promotion){
 		return new ResponseEntity<Promotion>(promotion, HttpStatus.OK);
 	}
 	
+	/*
 	@RequestMapping(method = RequestMethod.GET, value = "/receive/{index}")
 	public ResponseEntity<Receive> getReceive(@PathVariable("index") String index){
-		Receive w = new Receive("1", 1);
+		Receive w = new Receive(1, "1", 1);
 		return new ResponseEntity<Receive>(w, HttpStatus.OK);
 	}
+	*/
+	
 	@RequestMapping(method = RequestMethod.POST, value = "/receive/create/")
 	public ResponseEntity<Receive> postReceive(@RequestBody Receive receive){
 		return new ResponseEntity<Receive>(receive, HttpStatus.OK);
@@ -98,8 +91,22 @@ public class Controller {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/receive")
-	public ResponseEntity<HashMap<Integer, ReceiveDB>> getReceiveAll(){
-		HashMap<Integer, ReceiveDB> receives = ReceiveDB.findAll();
-		return new ResponseEntity<HashMap<Integer, ReceiveDB>>(receives, HttpStatus.OK);
+	public ResponseEntity<HashMap<Integer, Receive>> getReceiveAll(){
+		HashMap<Integer, Receive> receives = receiveDB.findAll();
+		return new ResponseEntity<HashMap<Integer, Receive>>(receives, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/receive/{orderId}")
+	public ResponseEntity<Receive> getReceiveByOrderId(@PathVariable("orderId") int orderId){
+		Receive receive = receiveDB.findByOrderId(orderId);
+		return new ResponseEntity<Receive>(receive, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/promotion/add")
+	public ResponseEntity<Receive> addPromotion(@RequestBody PromotionForm promotionForm){
+		Receive receive = receiveDB.findByOrderId(promotionForm.getOrder_id());
+		Promotion.addPromotion(promotionForm.getPromotion_id(), receive.getId());
+		receive = receiveDB.findByOrderId(promotionForm.getOrder_id());
+		return new ResponseEntity<Receive>(receive, HttpStatus.OK);
 	}
 }
