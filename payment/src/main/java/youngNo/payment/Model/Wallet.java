@@ -2,6 +2,8 @@ package youngNo.payment.Model;
 
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Wallet extends Model{
 	private double balance;
@@ -30,6 +32,11 @@ public class Wallet extends Model{
 	}
 	
 	public void addBalance(double balance) {
+		Date date = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		PaymentLog paymentLog = new PaymentLog(this.id, formatter.format(date).toString(), this.id, balance);
+		paymentLog.save();
+		System.out.println();
 		this.balance = this.balance + balance;
 	}
 

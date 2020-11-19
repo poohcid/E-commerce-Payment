@@ -89,7 +89,7 @@ public class Controller {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/paymentLog/{index}")
 	public ResponseEntity<PaymentLog> getPaymentLog(@PathVariable("index") String index){
-		PaymentLog w = new PaymentLog("1", 1, 1);
+		PaymentLog w = new PaymentLog(1, "1", 1, 1);
 		return new ResponseEntity<PaymentLog>(w, HttpStatus.OK);
 	}
 	@RequestMapping(method = RequestMethod.POST, value = "/paymentLog/create/")
