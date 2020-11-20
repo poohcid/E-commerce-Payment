@@ -109,4 +109,12 @@ public class Controller {
 		receive = Receive.findByOrderId(promotionForm.getOrder_id());
 		return new ResponseEntity<Receive>(receive, HttpStatus.OK);
 	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value = "/promotion/remove")
+	public ResponseEntity<Receive> removePromotion(@RequestBody PromotionForm promotionForm){
+		Receive receive = Receive.findByOrderId(promotionForm.getOrder_id());
+		receive.removePromotion(promotionForm.getPromotion_id());
+		receive = Receive.findByOrderId(promotionForm.getOrder_id());
+		return new ResponseEntity<Receive>(receive, HttpStatus.OK);
+	}
 }

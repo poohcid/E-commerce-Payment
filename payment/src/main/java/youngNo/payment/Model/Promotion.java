@@ -35,6 +35,28 @@ public class Promotion extends Model{
 			e.printStackTrace();
 		}
 	}
+	
+	public static void removePromotion(int promotion_id, Receive receive) {
+		Promotion promotionRemove;
+		for (Promotion promoton : receive.getPromotions()) {
+			if (promoton.getPromotion_id() == promotion_id) {
+				promotionRemove = promoton;
+				break;
+			}
+		}
+		/*
+		Connection conn = null;
+		try {
+			conn = DriverManager.getConnection(url);
+			Statement stmt = conn.createStatement();
+			stmt.executeUpdate("INSERT INTO PromotionUsing (promotion_id, receive_id) "
+					+ String.format(" VALUES (%d, %d) ",promotion_id, receive.getId()));
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		*/
+	}
 
 	public int getPromotion_id() {
 		return promotion_id;

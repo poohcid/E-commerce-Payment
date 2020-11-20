@@ -23,7 +23,7 @@ public class Receive extends Model{
 	public Receive(int id, int order_id) {
 		this(id, null, order_id);
 	}
-	
+
 	@SuppressWarnings("finally")
 	public static Receive findByOrderId(int orderId) {
 		Connection conn = null;
@@ -32,10 +32,8 @@ public class Receive extends Model{
 		try {
 			conn = DriverManager.getConnection(url);
 			Statement stmt = conn.createStatement();
-			//ResultSet result = stmt.executeQuery("SELECT * FROM Receive "
-			//		+ "WHERE "+whereQuery);
 			ResultSet result = stmt.executeQuery("SELECT * FROM Receive "
-					+ "INNER JOIN PromotionUsing ON PromotionUsing.receive_id=Receive.id "
+					+ " LEFT OUTER JOIN PromotionUsing ON PromotionUsing.receive_id=Receive.id "
 					+ " WHERE "+whereQuery);
 			if (!result.next()) {
 				stmt.executeUpdate("INSERT INTO Receive (order_id) "
@@ -55,6 +53,24 @@ public class Receive extends Model{
 			e.printStackTrace();
 		}finally {
 			return receive;
+		}
+	}
+	
+	public void removePromotion(int promotion_id) {
+		Connection conn = null;
+		try {
+			conn = DriverManager.getConnection(url);
+			Statement stmt = conn.createStatement();
+			ResultSet result = stmt.executeQuery("SELECT * FROM PromotionUsing"
+					+ String.format(" WHERE receive_id=%d AND promotion_id=%d ", this.id, promotion_id));
+			if (result.next()) {
+				stmt.executeUpdate("DELETE FROM PromotionUsing "
+						+ String.format(" WHERE id=%d", result.getInt("id")));
+			}
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 
