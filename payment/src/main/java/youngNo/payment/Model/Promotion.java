@@ -6,15 +6,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonProperty.Access;
+
 import youngNo.payment.ModelForm.PromotionForm;
 
 public class Promotion extends Model{
+	@JsonProperty(access = Access.READ_ONLY)
 	private int id;
+	
 	private int promotion_id;
 	private int receive_id;
 	
 	public Promotion(int id, int promotion_id, int receive_id) {
-		this.id = id;
 		this.setReceive_id(receive_id);
 		this.setPromotion_id(promotion_id);
 	}

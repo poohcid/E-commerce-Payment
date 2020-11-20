@@ -98,15 +98,15 @@ public class Controller {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/receive/{orderId}")
 	public ResponseEntity<Receive> getReceiveByOrderId(@PathVariable("orderId") int orderId){
-		Receive receive = receiveDB.findByOrderId(orderId);
+		Receive receive = Receive.findByOrderId(orderId);
 		return new ResponseEntity<Receive>(receive, HttpStatus.OK);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/promotion/add")
 	public ResponseEntity<Receive> addPromotion(@RequestBody PromotionForm promotionForm){
-		Receive receive = receiveDB.findByOrderId(promotionForm.getOrder_id());
+		Receive receive = Receive.findByOrderId(promotionForm.getOrder_id());
 		Promotion.addPromotion(promotionForm.getPromotion_id(), receive.getId());
-		receive = receiveDB.findByOrderId(promotionForm.getOrder_id());
+		receive = Receive.findByOrderId(promotionForm.getOrder_id());
 		return new ResponseEntity<Receive>(receive, HttpStatus.OK);
 	}
 }
