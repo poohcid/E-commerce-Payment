@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import youngNo.payment.Model.*;
 import youngNo.payment.ModelForm.*;
+
+import java.util.ArrayList;
 import java.util.HashMap;
 import youngNo.payment.Database.*;
 
@@ -57,14 +59,6 @@ public class Controller {
 		return new ResponseEntity<Promotion>(promotion, HttpStatus.OK);
 	}
 	
-	/*
-	@RequestMapping(method = RequestMethod.GET, value = "/receive/{index}")
-	public ResponseEntity<Receive> getReceive(@PathVariable("index") String index){
-		Receive w = new Receive(1, "1", 1);
-		return new ResponseEntity<Receive>(w, HttpStatus.OK);
-	}
-	*/
-	
 	@RequestMapping(method = RequestMethod.POST, value = "/receive/create/")
 	public ResponseEntity<Receive> postReceive(@RequestBody Receive receive){
 		return new ResponseEntity<Receive>(receive, HttpStatus.OK);
@@ -93,6 +87,9 @@ public class Controller {
 	@RequestMapping(method = RequestMethod.GET, value = "/receive")
 	public ResponseEntity<HashMap<Integer, Receive>> getReceiveAll(){
 		HashMap<Integer, Receive> receives = receiveDB.findAll();
+		ArrayList<Integer> order_id = new ArrayList<Integer>();
+		order_id.add(1); order_id.add(4); order_id.add(4);
+		System.out.println(order_id);
 		return new ResponseEntity<HashMap<Integer, Receive>>(receives, HttpStatus.OK);
 	}
 	
@@ -105,7 +102,8 @@ public class Controller {
 	@RequestMapping(method = RequestMethod.POST, value = "/promotion/add")
 	public ResponseEntity<Receive> addPromotion(@RequestBody PromotionForm promotionForm){
 		Receive receive = Receive.findByOrderId(promotionForm.getOrder_id());
-		Promotion.addPromotion(promotionForm.getPromotion_id(), receive.getId());
+		//Promotion.addPromotion(promotionForm.getPromotion_id(), receive.getId());
+		receive.addPromotion(promotionForm.getPromotion_id());
 		receive = Receive.findByOrderId(promotionForm.getOrder_id());
 		return new ResponseEntity<Receive>(receive, HttpStatus.OK);
 	}
@@ -115,6 +113,13 @@ public class Controller {
 		Receive receive = Receive.findByOrderId(promotionForm.getOrder_id());
 		receive.removePromotion(promotionForm.getPromotion_id());
 		receive = Receive.findByOrderId(promotionForm.getOrder_id());
+		return new ResponseEntity<Receive>(receive, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/pay")
+	public ResponseEntity<Receive> paymentOrder(@RequestBody PaymentForm paymentForm){
+		Receive receive = Receive.findByOrderId(paymentForm.getOrder_id());
+		receive.confirm();
 		return new ResponseEntity<Receive>(receive, HttpStatus.OK);
 	}
 }
