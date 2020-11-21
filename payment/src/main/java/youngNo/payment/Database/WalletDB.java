@@ -25,9 +25,11 @@ public class WalletDB extends ModelDB {
 			Statement stmt = conn.createStatement();
 			ResultSet result = stmt.executeQuery("SELECT * FROM Wallet WHERE user_id="+userId);
 			if (!result.next()) {
-				int id = stmt.executeUpdate("INSERT INTO Wallet (balance, user_id)"
+				stmt.executeUpdate("INSERT INTO Wallet (balance, user_id)"
 						+ String.format("VALUES (0.0, %d)", userId));
-				wallet = new Wallet(id, 0.0, userId);
+				result = stmt.executeQuery("SELECT * FROM Wallet WHERE user_id="+userId);
+				
+				wallet = new Wallet(result.getInt("id"), 0.0, userId);
 			}
 			else {
 				wallet = new Wallet(result.getInt("id"), result.getFloat("balance"), result.getInt("user_id"));

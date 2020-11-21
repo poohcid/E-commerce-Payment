@@ -1,5 +1,8 @@
 package youngNo.payment.Model;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.SimpleDateFormat;
@@ -20,6 +23,34 @@ public class Wallet extends Model{
 		this.id = id;
 	}
 	
+	@SuppressWarnings("finally")
+	public static Wallet findOne(int userId) {
+		Connection conn = null;
+		Wallet wallet = null;
+		try {
+			conn = DriverManager.getConnection(url);
+			Statement stmt = conn.createStatement();
+			ResultSet result = stmt.executeQuery("SELECT * FROM Wallet WHERE user_id="+userId);
+			if (!result.next()) {
+				stmt.executeUpdate("INSERT INTO Wallet (balance, user_id)"
+						+ String.format("VALUES (0.0, %d)", userId));
+				result = stmt.executeQuery("SELECT * FROM Wallet WHERE user_id="+userId);
+				
+				wallet = new Wallet(result.getInt("id"), 0.0, userId);
+			}
+			else {
+				wallet = new Wallet(result.getInt("id"), result.getFloat("balance"), result.getInt("user_id"));
+			}
+			conn.close();
+			return wallet;
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			return wallet;
+		}
+	}
+	
 	@Override
 	protected void saveHandle(Statement stmt) throws SQLException {
 		stmt.executeUpdate("UPDATE Wallet "
@@ -34,9 +65,8 @@ public class Wallet extends Model{
 	public void addBalance(double balance) {
 		Date date = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-		PaymentLog paymentLog = new PaymentLog(this.id, formatter.format(date).toString(), this.id, balance);
+		PaymentLog paymentLog = new PaymentLog(this.id, formatter.format(date).toString(), this.id, balance, "top up");
 		paymentLog.save();
-		System.out.println();
 		this.balance = this.balance + balance;
 	}
 

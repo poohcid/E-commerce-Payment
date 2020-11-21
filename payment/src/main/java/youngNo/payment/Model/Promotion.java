@@ -12,8 +12,6 @@ import com.fasterxml.jackson.annotation.JsonProperty.Access;
 import youngNo.payment.ModelForm.PromotionForm;
 
 public class Promotion extends Model{
-	@JsonProperty(access = Access.READ_ONLY)
-	private int id;
 	
 	private int promotion_id;
 	private int receive_id;
@@ -72,10 +70,6 @@ public class Promotion extends Model{
 
 	public void setReceive_id(int receive_id) {
 		this.receive_id = receive_id;
-	}
-
-	public int getId() {
-		return id;
 	}
 
 	@Override

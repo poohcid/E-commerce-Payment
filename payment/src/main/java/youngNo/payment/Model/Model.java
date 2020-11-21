@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public abstract class Model {
-	protected static String url="jdbc:sqlite:payment.db";
+	protected static final String url="jdbc:sqlite:payment.db";
 	public void save() {
 		Connection conn = null;
 		try {

@@ -47,7 +47,8 @@ public class Receive extends Model{
 			}
 			receive = new Receive(result.getInt("id"), result.getString("create_date"), result.getInt("order_id"));
 			do {
-				receive.getPromotions().add(new Promotion(1, result.getInt("promotion_id"), result.getInt("receive_id")));
+				if (result.getInt("promotion_id") != 0)
+					receive.getPromotions().add(new Promotion(1, result.getInt("promotion_id"), result.getInt("receive_id")));
 			}while (result.next());
 			conn.close();
 			return receive;
@@ -59,38 +60,11 @@ public class Receive extends Model{
 	}
 	
 	public static ArrayList<Receive> findAllByOrderId(ArrayList<Integer> orders_id) {
-		Connection conn = null;
-		ArrayList<Receive> receive = null;
-		/*
-		String whereQuery = String.format(" order_id=%d ", orderId);
-		try {
-			conn = DriverManager.getConnection(url);
-			Statement stmt = conn.createStatement();
-			ResultSet result = stmt.executeQuery("SELECT * FROM Receive "
-					+ " LEFT OUTER JOIN PromotionUsing ON PromotionUsing.receive_id=Receive.id "
-					+ " WHERE "+whereQuery);
-			if (!result.next()) {
-				stmt.executeUpdate("INSERT INTO Receive (order_id) "
-						+ String.format(" VALUES (%d) ", orderId));
-				result = stmt.executeQuery("SELECT * "
-						+ " FROM Receive "
-						+ "INNER JOIN PromotionUsing ON PromotionUsing.receive_id=Receive.id "
-						+ " WHERE "+whereQuery);
-			}
-			receive = new Receive(result.getInt("id"), result.getString("create_date"), result.getInt("order_id"));
-			do {
-				receive.getPromotions().add(new Promotion(1, result.getInt("promotion_id"), result.getInt("receive_id")));
-			}while (result.next());
-			conn.close();
-			return receive;
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}finally {
-			return receive;
+		ArrayList<Receive> receives = new ArrayList<Receive>();
+		for (Integer i: orders_id) {
+			receives.add(Receive.findByOrderId(i));
 		}
-		*/
-		
-		return null;
+		return receives;
 	}
 	
 	public void addPromotion(int promotion_id) {

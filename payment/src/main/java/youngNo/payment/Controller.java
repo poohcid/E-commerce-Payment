@@ -18,14 +18,10 @@ import youngNo.payment.Database.*;
 public class Controller {
 	private SaveFakeDatabase fakeSave;
 	private FakeDatabase fakeDatabase;
-	private WalletDB walletDB;
-	private ReceiveDB receiveDB;
 	
 	public Controller() {
 		fakeSave= new SaveFakeDatabase();
 		fakeDatabase = fakeSave.loadDatabase();
-		walletDB = new WalletDB();
-		receiveDB = new ReceiveDB();
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/")
@@ -35,33 +31,16 @@ public class Controller {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/wallet/{index}")
 	public ResponseEntity<Wallet> getWallet(@PathVariable("index") int userId){
-		Wallet wallet = walletDB.findOne(userId);
+		Wallet wallet = Wallet.findOne(userId);
 		return new ResponseEntity<Wallet>(wallet, HttpStatus.OK);
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "/wallet/addBalance/")
-	public ResponseEntity<Wallet> addBalanceWallet(@RequestBody Wallet wallet){
-		Wallet updateWallet = walletDB.findOne(wallet.getUser_id());
-		updateWallet.addBalance(wallet.getBalance());
+	public ResponseEntity<Wallet> addBalanceWallet(@RequestBody WalletForm walletFrom){
+		Wallet updateWallet = Wallet.findOne(walletFrom.getUser_id());
+		updateWallet.addBalance(walletFrom.getBalance());
 		updateWallet.save();
 		return new ResponseEntity<Wallet>(updateWallet, HttpStatus.OK);
-	}
-	
-	@RequestMapping(method = RequestMethod.POST, value = "/wallet/create/")
-	public ResponseEntity<Wallet> postWallet(@RequestBody Wallet wallet){
-		fakeDatabase.addWallet(wallet);
-		fakeSave.saveData(fakeDatabase);
-		return new ResponseEntity<Wallet>(wallet, HttpStatus.OK);
-	}
-	
-	@RequestMapping(method = RequestMethod.POST, value = "/promotion/create/")
-	public ResponseEntity<Promotion> postPromotion(@RequestBody Promotion promotion){
-		return new ResponseEntity<Promotion>(promotion, HttpStatus.OK);
-	}
-	
-	@RequestMapping(method = RequestMethod.POST, value = "/receive/create/")
-	public ResponseEntity<Receive> postReceive(@RequestBody Receive receive){
-		return new ResponseEntity<Receive>(receive, HttpStatus.OK);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/refunding/{index}")
@@ -74,23 +53,19 @@ public class Controller {
 		return new ResponseEntity<Refunding>(refunding, HttpStatus.OK);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/paymentLog/{index}")
-	public ResponseEntity<PaymentLog> getPaymentLog(@PathVariable("index") String index){
-		PaymentLog w = new PaymentLog(1, "1", 1, 1);
-		return new ResponseEntity<PaymentLog>(w, HttpStatus.OK);
-	}
-	@RequestMapping(method = RequestMethod.POST, value = "/paymentLog/create/")
-	public ResponseEntity<PaymentLog> postPaymentLog(@RequestBody PaymentLog paymentLog){
-		return new ResponseEntity<PaymentLog>(paymentLog, HttpStatus.OK);
+	@RequestMapping(method = RequestMethod.GET, value = "/paymentLog/{user_id}")
+	public ResponseEntity<ArrayList<PaymentLog>> getPaymentLog(@PathVariable("user_id") int user_id){
+		Wallet wallet = Wallet.findOne(user_id);
+		ArrayList<PaymentLog> paymentLogs = PaymentLog.findAll(wallet.getId());
+		return new ResponseEntity<ArrayList<PaymentLog>>(paymentLogs, HttpStatus.OK);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/receive")
-	public ResponseEntity<HashMap<Integer, Receive>> getReceiveAll(){
-		HashMap<Integer, Receive> receives = receiveDB.findAll();
+	public ResponseEntity<ArrayList<Receive>> getReceiveAll(){
 		ArrayList<Integer> order_id = new ArrayList<Integer>();
-		order_id.add(1); order_id.add(4); order_id.add(4);
-		System.out.println(order_id);
-		return new ResponseEntity<HashMap<Integer, Receive>>(receives, HttpStatus.OK);
+		order_id.add(1); order_id.add(4); order_id.add(5);
+		ArrayList<Receive> receives = Receive.findAllByOrderId(order_id);
+		return new ResponseEntity<ArrayList<Receive>>(receives, HttpStatus.OK);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/receive/{orderId}")
