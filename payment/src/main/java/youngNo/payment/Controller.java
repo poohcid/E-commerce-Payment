@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,22 +25,34 @@ public class Controller {
 		fakeDatabase = fakeSave.loadDatabase();
 	}
 	
+	private int getUserId(String token) {
+		
+		//fake
+		return Integer.parseInt(token);
+	}
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/")
-	public String sayHello() {
-		return "Payment";
+	public String sayHello(@RequestHeader("Authorization") String user_id) {
+		return user_id;
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/wallet/{index}")
-	public ResponseEntity<Wallet> getWallet(@PathVariable("index") int userId){
-		Wallet wallet = Wallet.findOne(userId);
+	@RequestMapping(method = RequestMethod.GET, value = "/wallet")
+	public ResponseEntity<Wallet> getWallet(
+			@RequestHeader("Authorization") String token
+			){
+		int user_id = this.getUserId(token);
+		Wallet wallet = Wallet.findOne(user_id);
 		return new ResponseEntity<Wallet>(wallet, HttpStatus.OK);
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "/wallet/addBalance/")
-	public ResponseEntity<Wallet> addBalanceWallet(@RequestBody WalletForm walletFrom){
-		Wallet updateWallet = Wallet.findOne(walletFrom.getUser_id());
+	public ResponseEntity<Wallet> addBalanceWallet(
+			@RequestHeader("Authorization") String token,
+			@RequestBody WalletForm walletFrom
+			){
+		int user_id = this.getUserId(token);
+		Wallet updateWallet = Wallet.findOne(user_id);
 		updateWallet.addBalance(walletFrom.getBalance());
-		updateWallet.save();
 		return new ResponseEntity<Wallet>(updateWallet, HttpStatus.OK);
 	}
 	
@@ -92,9 +105,14 @@ public class Controller {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/pay")
-	public ResponseEntity<Receive> paymentOrder(@RequestBody PaymentForm paymentForm){
+	public ResponseEntity<Receive> paymentOrder(
+			@RequestHeader("Authorization") String token,
+			@RequestBody PaymentForm paymentForm
+			){
+		int user_id = this.getUserId(token);
+		Wallet wallet = Wallet.findOne(user_id);
 		Receive receive = Receive.findByOrderId(paymentForm.getOrder_id());
-		receive.confirm();
+		receive.confirm(wallet);
 		return new ResponseEntity<Receive>(receive, HttpStatus.OK);
 	}
 }

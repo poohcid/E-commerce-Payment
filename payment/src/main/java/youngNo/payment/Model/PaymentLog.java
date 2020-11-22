@@ -66,7 +66,6 @@ public class PaymentLog extends Model{
 
 	@Override
 	protected void saveHandle(Statement stmt) throws SQLException {
-		System.out.println(this.created_date);
 		stmt.executeUpdate("INSERT INTO PaymentLog (create_date, wallet_id, amount, type) "
 				+ String.format(" VALUES ('%s', %d, %.2f, '%s') ", this.created_date, this.wallet_id, this.amount, this.type));
 	}

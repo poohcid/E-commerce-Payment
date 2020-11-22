@@ -42,10 +42,12 @@ public class Receive extends Model{
 						+ String.format(" VALUES (%d) ", orderId));
 				result = stmt.executeQuery("SELECT * "
 						+ " FROM Receive "
-						+ "INNER JOIN PromotionUsing ON PromotionUsing.receive_id=Receive.id "
+						+ " LEFT OUTER JOIN PromotionUsing ON PromotionUsing.receive_id=Receive.id "
 						+ " WHERE "+whereQuery);
+				receive = new Receive(result.getInt("id"), result.getString("create_date"), result.getInt("order_id"));
 			}
-			receive = new Receive(result.getInt("id"), result.getString("create_date"), result.getInt("order_id"));
+			else
+				receive = new Receive(result.getInt("id"), result.getString("create_date"), result.getInt("order_id"));
 			do {
 				if (result.getInt("promotion_id") != 0)
 					receive.getPromotions().add(new Promotion(1, result.getInt("promotion_id"), result.getInt("receive_id")));
@@ -66,6 +68,16 @@ public class Receive extends Model{
 		}
 		return receives;
 	}
+	
+	
+	
+	//********************
+	private double getNetPayment() {
+		//fake
+		return 168.0;
+	}
+	
+	
 	
 	public void addPromotion(int promotion_id) {
 		Connection conn = null;
@@ -104,11 +116,19 @@ public class Receive extends Model{
 		}
 	}
 	
-	public void confirm () {
+	public void confirm (Wallet wallet) {
+		if (!(this.created_date == null))
+			return;
 		Date date = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		this.created_date = formatter.format(date).toString();
-		this.save();
+		double amount = this.getNetPayment();
+		if (wallet.pay(amount)) {
+			this.save();
+		}
+		else {
+			this.created_date = null;
+		}
 	}
 
 	public int getOrder_id() {

@@ -66,8 +66,21 @@ public class Wallet extends Model{
 		Date date = new Date();
 		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		PaymentLog paymentLog = new PaymentLog(this.id, formatter.format(date).toString(), this.id, balance, "top up");
-		paymentLog.save();
 		this.balance = this.balance + balance;
+		this.save();
+		paymentLog.save();
+	}
+	
+	public boolean pay(double amount) {
+		if (this.balance - amount < 0)
+			return false;
+		this.balance = this.balance - amount;
+		Date date = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		PaymentLog paymentLog = new PaymentLog(this.id, formatter.format(date).toString(), this.id, amount, "pay");
+		this.save();
+		paymentLog.save();
+		return true;
 	}
 
 	public int getUser_id() {
