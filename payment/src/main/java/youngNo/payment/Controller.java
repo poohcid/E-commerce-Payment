@@ -31,6 +31,26 @@ public class Controller {
 		return Integer.parseInt(token);
 	}
 	
+	private ArrayList<Integer> getOrdersIdByUser(int user_id){
+		//fake
+		ArrayList<Integer> orders = new ArrayList<Integer>();
+		if (user_id == 1) {
+			orders.add(1); orders.add(2); orders.add(3); 
+		}
+		if (user_id == 2) {
+			orders.add(11); orders.add(21); orders.add(13);
+			orders.add(5); orders.add(22); orders.add(7);
+		}
+		if (user_id == 3) {
+			orders.add(10); 
+		}
+		if (user_id == 4) {
+			orders.add(1); orders.add(28); 
+		}
+		
+		return orders;
+	}
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/")
 	public String sayHello(@RequestHeader("Authorization") String user_id) {
 		return user_id;
@@ -56,13 +76,22 @@ public class Controller {
 		return new ResponseEntity<Wallet>(updateWallet, HttpStatus.OK);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/refunding/{index}")
-	public ResponseEntity<Refunding> getRefunding(@PathVariable("index") String index){
-		Refunding w = new Refunding("1", 1);
-		return new ResponseEntity<Refunding>(w, HttpStatus.OK);
+	@RequestMapping(method = RequestMethod.GET, value = "/refunding")
+	public ResponseEntity<ArrayList<Refunding>> getRefunding(
+			@RequestHeader("Authorization") String token
+			){
+		int user_id = this.getUserId(token);
+		ArrayList<Integer> orders_id = this.getOrdersIdByUser(user_id);
+		ArrayList<Receive> receives = Receive.findAllByOrderId(orders_id);
+		ArrayList<Refunding> refunding = Refunding.getRefundingByReceive(receives);
+		return new ResponseEntity<ArrayList<Refunding>>(refunding, HttpStatus.OK);
 	}
+	
 	@RequestMapping(method = RequestMethod.POST, value = "/refunding/create/")
-	public ResponseEntity<Refunding> postRefunding(@RequestBody Refunding refunding){
+	public ResponseEntity<Refunding> postRefunding(@RequestBody PaymentForm paymentForm){
+		Receive receive = Receive.findByOrderId(paymentForm.getOrder_id());
+		Refunding refunding = new Refunding(receive);
+		refunding.save();
 		return new ResponseEntity<Refunding>(refunding, HttpStatus.OK);
 	}
 	
@@ -74,9 +103,11 @@ public class Controller {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/receive")
-	public ResponseEntity<ArrayList<Receive>> getReceiveAll(){
-		ArrayList<Integer> order_id = new ArrayList<Integer>();
-		order_id.add(1); order_id.add(4); order_id.add(5);
+	public ResponseEntity<ArrayList<Receive>> getReceiveAll(
+			@RequestHeader("Authorization") String token
+			){
+		int user_id = this.getUserId(token);
+		ArrayList<Integer> order_id = this.getOrdersIdByUser(user_id);
 		ArrayList<Receive> receives = Receive.findAllByOrderId(order_id);
 		return new ResponseEntity<ArrayList<Receive>>(receives, HttpStatus.OK);
 	}

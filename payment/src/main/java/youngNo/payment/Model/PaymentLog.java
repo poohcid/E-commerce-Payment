@@ -5,7 +5,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class PaymentLog extends Model{
 	private int id;
@@ -13,6 +15,16 @@ public class PaymentLog extends Model{
 	private int wallet_id;
 	private double amount;
 	private String type;
+	
+	public PaymentLog(int id, int wallet_id, double amount, String type) {
+		this.id = id;
+		this.wallet_id = wallet_id;
+		Date date = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		this.created_date = formatter.format(date).toString();
+		this.amount = amount;
+		this.type = type;
+	}
 	
 	public PaymentLog(int id, String created_date, int wallet_id, double amount, String type) {
 		this.id = id;

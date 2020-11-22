@@ -63,9 +63,7 @@ public class Wallet extends Model{
 	}
 	
 	public void addBalance(double balance) {
-		Date date = new Date();
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-		PaymentLog paymentLog = new PaymentLog(this.id, formatter.format(date).toString(), this.id, balance, "top up");
+		PaymentLog paymentLog = new PaymentLog(this.id, this.id, balance, "top up");
 		this.balance = this.balance + balance;
 		this.save();
 		paymentLog.save();
@@ -75,9 +73,7 @@ public class Wallet extends Model{
 		if (this.balance - amount < 0)
 			return false;
 		this.balance = this.balance - amount;
-		Date date = new Date();
-		SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-		PaymentLog paymentLog = new PaymentLog(this.id, formatter.format(date).toString(), this.id, amount, "pay");
+		PaymentLog paymentLog = new PaymentLog(this.id, this.id, amount, "pay");
 		this.save();
 		paymentLog.save();
 		return true;
