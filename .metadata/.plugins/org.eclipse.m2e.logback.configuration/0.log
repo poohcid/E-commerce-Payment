@@ -3052,3 +3052,40 @@
 2020-11-23 16:51:57,763 [Worker-73: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\pooh\Desktop\project\class\sop\E-commerce-Payment\payment\src\main\resources
 2020-11-23 16:51:57,765 [Worker-73: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
 2020-11-23 16:51:57,766 [Worker-73: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\pooh\Desktop\project\class\sop\E-commerce-Payment\payment\src\test\resources
+2020-11-23 19:09:20,996 [Worker-4: Loading available Gradle versions] INFO  o.e.b.c.i.u.g.PublishedGradleVersions - Gradle version information cache is up-to-date. Trying to read.
+2020-11-23 19:22:59,446 [Worker-29: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2020-11-23 19:22:59,447 [Worker-29: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\pooh\Desktop\project\class\sop\E-commerce-Payment\payment\src\main\resources
+2020-11-23 19:22:59,453 [Worker-29: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2020-11-23 19:22:59,453 [Worker-29: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\pooh\Desktop\project\class\sop\E-commerce-Payment\payment\src\test\resources
+2020-11-23 19:25:46,888 [Worker-29: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2020-11-23 19:25:46,888 [Worker-29: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\pooh\Desktop\project\class\sop\E-commerce-Payment\payment\src\main\resources
+2020-11-23 19:25:46,892 [Worker-29: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2020-11-23 19:25:46,892 [Worker-29: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\pooh\Desktop\project\class\sop\E-commerce-Payment\payment\src\test\resources
+2020-11-23 19:25:51,642 [Worker-0: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2020-11-23 19:25:51,643 [Worker-0: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\pooh\Desktop\project\class\sop\E-commerce-Payment\payment\src\main\resources
+2020-11-23 19:25:51,648 [Worker-0: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2020-11-23 19:25:51,648 [Worker-0: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\pooh\Desktop\project\class\sop\E-commerce-Payment\payment\src\test\resources
+2020-11-23 19:25:59,722 [Worker-31: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2020-11-23 19:25:59,723 [Worker-31: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\pooh\Desktop\project\class\sop\E-commerce-Payment\payment\src\main\resources
+2020-11-23 19:25:59,727 [Worker-31: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2020-11-23 19:25:59,728 [Worker-31: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\pooh\Desktop\project\class\sop\E-commerce-Payment\payment\src\test\resources
+2020-11-23 19:26:04,126 [Worker-31: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2020-11-23 19:26:04,127 [Worker-31: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\pooh\Desktop\project\class\sop\E-commerce-Payment\payment\src\main\resources
+2020-11-23 19:26:04,130 [Worker-31: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2020-11-23 19:26:04,132 [Worker-31: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\pooh\Desktop\project\class\sop\E-commerce-Payment\payment\src\test\resources
+2020-11-23 19:26:08,147 [Worker-29: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2020-11-23 19:26:08,148 [Worker-29: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\pooh\Desktop\project\class\sop\E-commerce-Payment\payment\src\main\resources
+2020-11-23 19:26:08,152 [Worker-29: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2020-11-23 19:26:08,153 [Worker-29: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\pooh\Desktop\project\class\sop\E-commerce-Payment\payment\src\test\resources
+2020-11-23 19:26:14,453 [Worker-1: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2020-11-23 19:26:14,454 [Worker-1: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\pooh\Desktop\project\class\sop\E-commerce-Payment\payment\src\main\resources
+2020-11-23 19:26:14,457 [Worker-1: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2020-11-23 19:26:14,458 [Worker-1: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\pooh\Desktop\project\class\sop\E-commerce-Payment\payment\src\test\resources
+2020-11-23 19:26:17,985 [Worker-1: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2020-11-23 19:26:17,986 [Worker-1: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\pooh\Desktop\project\class\sop\E-commerce-Payment\payment\src\main\resources
+2020-11-23 19:26:17,993 [Worker-1: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2020-11-23 19:26:17,994 [Worker-1: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\pooh\Desktop\project\class\sop\E-commerce-Payment\payment\src\test\resources
+2020-11-23 19:26:21,891 [Worker-34: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2020-11-23 19:26:21,893 [Worker-34: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\pooh\Desktop\project\class\sop\E-commerce-Payment\payment\src\main\resources
+2020-11-23 19:26:21,896 [Worker-34: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - Using 'UTF-8' encoding to copy filtered resources.
+2020-11-23 19:26:21,897 [Worker-34: Building] INFO  o.e.m.c.i.embedder.EclipseLogger - skip non existing resourceDirectory C:\Users\pooh\Desktop\project\class\sop\E-commerce-Payment\payment\src\test\resources

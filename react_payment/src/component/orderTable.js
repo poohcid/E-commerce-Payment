@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import '../App.css';
 import { Link } from "react-router-dom"
 import styled from 'styled-components';
@@ -8,6 +8,21 @@ const OrderTable = () =>{
         textAlign: "center",
         borderRadius: 5,
     }
+
+    useEffect(() =>{
+        fetch('http://localhost:8080/receive', {
+            method: 'GET',
+            headers: new Headers({
+                'Authorization': '1', 
+                'Content-Type': 'application/json'
+            })
+        })
+        .then((res) => res.json())
+        .then((json) =>{
+            console.log(json)
+        })
+    }, [])
+
     return(
         <table style={tableStyle}>
             <thead>

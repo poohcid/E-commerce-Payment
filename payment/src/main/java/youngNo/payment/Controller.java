@@ -6,6 +6,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -73,11 +74,13 @@ public class Controller {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/")
+	@CrossOrigin(origins = "http://localhost:3000")
 	public String sayHello(@RequestHeader("Authorization") String user_id) {
 		return user_id;
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/wallet")
+	@CrossOrigin(origins = "http://localhost:3000")
 	public ResponseEntity<Wallet> getWallet(
 			@RequestHeader("Authorization") String token
 			){
@@ -87,6 +90,7 @@ public class Controller {
 	}
 	
 	@RequestMapping(method = RequestMethod.PUT, value = "/wallet/addBalance/")
+	@CrossOrigin(origins = "http://localhost:3000")
 	public ResponseEntity<Wallet> addBalanceWallet(
 			@RequestHeader("Authorization") String token,
 			@RequestBody WalletForm walletFrom
@@ -98,6 +102,7 @@ public class Controller {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/refunding")
+	@CrossOrigin(origins = "http://localhost:3000")
 	public ResponseEntity<ArrayList<Refunding>> getRefunding(
 			@RequestHeader("Authorization") String token
 			){
@@ -109,6 +114,7 @@ public class Controller {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/refunding/create/")
+	@CrossOrigin(origins = "http://localhost:3000")
 	public ResponseEntity<Refunding> postRefunding(@RequestBody PaymentForm paymentForm){
 		Receive receive = Receive.findByOrderId(paymentForm.getOrder_id());
 		Refunding refunding = new Refunding(receive);
@@ -117,6 +123,7 @@ public class Controller {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/paymentLog/{user_id}")
+	@CrossOrigin(origins = "http://localhost:3000")
 	public ResponseEntity<ArrayList<PaymentLog>> getPaymentLog(@PathVariable("user_id") int user_id){
 		Wallet wallet = Wallet.findOne(user_id);
 		ArrayList<PaymentLog> paymentLogs = PaymentLog.findAll(wallet.getId());
@@ -124,6 +131,7 @@ public class Controller {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/receive")
+	@CrossOrigin(origins = "http://localhost:3000")
 	public ResponseEntity<ArrayList<Receive>> getReceiveAll(
 			@RequestHeader("Authorization") String token
 			){
@@ -134,12 +142,14 @@ public class Controller {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/receive/{orderId}")
+	@CrossOrigin(origins = "http://localhost:3000")
 	public ResponseEntity<Receive> getReceiveByOrderId(@PathVariable("orderId") int orderId){
 		Receive receive = Receive.findByOrderId(orderId);
 		return new ResponseEntity<Receive>(receive, HttpStatus.OK);
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/promotion/add")
+	@CrossOrigin(origins = "http://localhost:3000")
 	public ResponseEntity<Receive> addPromotion(@RequestBody PromotionForm promotionForm){
 		Receive receive = Receive.findByOrderId(promotionForm.getOrder_id());
 		//Promotion.addPromotion(promotionForm.getPromotion_id(), receive.getId());
@@ -149,6 +159,7 @@ public class Controller {
 	}
 	
 	@RequestMapping(method = RequestMethod.DELETE, value = "/promotion/remove")
+	@CrossOrigin(origins = "http://localhost:3000")
 	public ResponseEntity<Receive> removePromotion(@RequestBody PromotionForm promotionForm){
 		Receive receive = Receive.findByOrderId(promotionForm.getOrder_id());
 		receive.removePromotion(promotionForm.getPromotion_id());
@@ -157,6 +168,7 @@ public class Controller {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/pay")
+	@CrossOrigin(origins = "http://localhost:3000")
 	public ResponseEntity<Receive> paymentOrder(
 			@RequestHeader("Authorization") String token,
 			@RequestBody PaymentForm paymentForm
