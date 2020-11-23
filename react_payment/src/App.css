@@ -3,6 +3,7 @@
 .container{
   max-width: 1220px;
   margin: 0 auto;
+  padding: 0 10px
 }
 
 body{
@@ -35,8 +36,17 @@ nav{
   align-items: center;
 }
 
-.navMenu-flex li{
+.navMenu-flex li .nav-link{
   padding: 0 10px;
+  transition: 0.3s;
+  border-bottom: 2px solid transparent;
+  transition: 0.5s;
+  padding-bottom: 15px;
+}
+
+.navMenu-flex li .nav-link:hover{
+  padding-bottom: 0px;
+  border-bottom: 2px solid #282c34;
 }
 
 .nav-link{
