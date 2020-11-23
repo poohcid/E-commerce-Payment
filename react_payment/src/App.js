@@ -6,13 +6,23 @@ import Unpaid from "./page/Unpaid"
 import TopUp from "./page/TopUp"
 import React from 'react';
 import { BrowserRouter, Route } from "react-router-dom"
+import { Provider } from "react-redux";
+import { createStore, combineReducers } from "redux";
+import balanceReducer from "./redux/reducer/balanceReducer";
+
+const rootReducer = combineReducers({
+  balance: balanceReducer,
+  });
+
+  const store = createStore(rootReducer);
 function App() {
   return (
+    <Provider store={store}> 
     <BrowserRouter>
       <Route exact={true} path='/'>
         <Home/>
       </Route>
-      <Route exact={true} path='/Pay'>
+      <Route exact={true} path='/Pay/:orderId'>
         <Pay/>
       </Route>
       <Route exact={true} path='/Record'>
@@ -25,6 +35,8 @@ function App() {
         <TopUp/>
       </Route>
     </BrowserRouter>
+    </Provider>
+
   );
 }
 

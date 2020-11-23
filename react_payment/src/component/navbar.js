@@ -1,12 +1,31 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import '../App.css';
 import { Link } from "react-router-dom"
 import styled from "styled-components"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faBars } from '@fortawesome/free-solid-svg-icons'
+import { useSelector, useDispatch } from "react-redux";
+import { topUp } from "../redux/action/balanceAction";
 
 const Navbar = () =>{
     const [menuEnable, setMenuEnable] = useState(false)
+    const balance = useSelector( (state) => state.balance.balance );
+    const dispatch = useDispatch();
+    useEffect(() =>{
+        const ac = new AbortController();
+        fetch('http://localhost:8080/wallet', {
+            method: 'GET',
+            headers: new Headers({
+                'Authorization': '1', 
+                'Content-Type': 'application/json'
+            })
+        })
+        .then((res) => res.json())
+        .then((json) =>{
+            dispatch(topUp(json.balance));
+        })
+        return () => ac.abort();
+    }, [])
     return(
         <React.Fragment>
         <nav>
@@ -16,7 +35,7 @@ const Navbar = () =>{
                     <li><Link to="/Unpaid" className="nav-link">ออเดอร์ที่ค้างชำระ</Link></li>
                     <li><Link to="/Record" className="nav-link">ประวัติการสั่งซื้อ</Link></li>
                     <li><Link to="/TopUp" className="nav-link">เติมเงิน</Link></li>
-                    <li><H2>100 บาท</H2></li>
+                    <li><H2>{balance} บาท</H2></li>
                  </ul>
                  <BarButton><FontAwesomeIcon icon={faBars} style={{fontSize: 25}} onClick={() => setMenuEnable(!menuEnable)}/></BarButton>
             </div>
@@ -26,7 +45,7 @@ const Navbar = () =>{
                 <LI><Link to="/Unpaid" className="nav-link">ออเดอร์ที่ค้างชำระ</Link></LI>
                 <LI><Link to="/Record" className="nav-link">ประวัติการสั่งซื้อ</Link></LI>
                 <LI><Link to="/TopUp" className="nav-link">เติมเงิน</Link></LI>
-                <LI><H2>100 บาท</H2></LI>
+                <LI><H2>{balance} บาท</H2></LI>
             </ul>
         </MobileMenu>
         </React.Fragment>

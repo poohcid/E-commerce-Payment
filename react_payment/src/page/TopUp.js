@@ -2,7 +2,12 @@ import React, {useState} from 'react';
 import '../App.css';
 import Navbar from "../component/navbar"
 import styled from "styled-components"
+import { useSelector, useDispatch } from "react-redux";
+import { topUp } from "../redux/action/balanceAction";
+
 const TopUp = () =>{
+    const balance = useSelector( (state) => state.balance.balance );
+    const dispatch = useDispatch();
     const [ money, setMoney ] = useState("")
     return(
         <React.Fragment>
@@ -11,8 +16,10 @@ const TopUp = () =>{
                 <center>
                 <h1>เติมเงิน</h1>
                 <Input type="number" placeholder="จำนวนเงินที่ต้องการเติม" min={0} value={money} onChange={e => setMoney(e.target.value)}/> <br/>
-                <Button onClick={() => console.log(money)}>เติมเงิน</Button>
-                
+                <Button onClick={() => {
+                    dispatch(topUp(balance+parseInt(money)));
+                }} disabled={money === ""}>เติมเงิน</Button>
+      
                 </center>
             </div>
         </React.Fragment>

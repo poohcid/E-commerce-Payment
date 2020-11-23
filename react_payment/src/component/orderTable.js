@@ -1,15 +1,16 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import '../App.css';
-import { Link } from "react-router-dom"
-import styled from 'styled-components';
-
+import { Link,useLocation } from "react-router-dom"
 const OrderTable = () =>{
+    const [data, setData] = useState([]) 
+    const location = useLocation()
     const tableStyle= {
         textAlign: "center",
         borderRadius: 5,
     }
-
+    
     useEffect(() =>{
+        const ac = new AbortController();
         fetch('http://localhost:8080/receive', {
             method: 'GET',
             headers: new Headers({
@@ -19,10 +20,37 @@ const OrderTable = () =>{
         })
         .then((res) => res.json())
         .then((json) =>{
-            console.log(json)
+            setData(json)
         })
+        return () => ac.abort();
     }, [])
 
+    const renderData = (value) =>{
+        if(location.pathname === "/"){
+            if(value.created_date === null){
+                return (
+                    <tr key={value.id}>
+                        <td>{value.id}</td>
+                        <td>{value.order_id}</td>
+                        <td><Link to={`/Pay/${value.order_id}`} className="nav-link">ชำระเงิน</Link></td>
+                    </tr>
+                ) 
+            }
+        }
+        else{
+            if(value.created_date !== null){
+                return (
+                    <tr key={value.id}>
+                        <td>{value.id}</td>
+                        <td>{value.order_id}</td>
+                        <td><Link to={`/Pay/${value.order_id}`} className="nav-link">ดู</Link></td>
+                    </tr>
+                ) 
+            }
+
+        }
+        
+    }
     return(
         <table style={tableStyle}>
             <thead>
@@ -32,12 +60,8 @@ const OrderTable = () =>{
                     <th></th>
                 </tr>
             </thead>
-            <tbody>          
-                <tr>
-                    <td>1</td>
-                    <td>order1</td>
-                    <td><Link to="/Pay" className="nav-link">ชำระเงิน</Link></td>
-                </tr>
+            <tbody>
+                {data.map((value) => renderData(value))}   
             </tbody>
         </table>
     );

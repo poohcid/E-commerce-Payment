@@ -1,14 +1,22 @@
-import React from 'react';
+import React,{ useState} from 'react';
 import '../App.css';
 import Navbar from "../component/navbar"
 import ProductTable from "../component/productListTable"
 import PromotionTable from "../component/promotionTable"
+import { useParams } from "react-router-dom"
+
+
 const Pay = () =>{
+
+    const { orderId } = useParams();
+
+
+
     return(
         <React.Fragment>
             <Navbar/>
             <div className="container">
-                <h1>รายการสินค้า</h1>
+                <h1>รายการสินค้า {orderId}</h1>
                 <ProductTable/>
                 <div className="price-container">
                     <h2>ราคาทั้งหมด : 5 บาท</h2>
