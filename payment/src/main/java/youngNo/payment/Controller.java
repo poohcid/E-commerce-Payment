@@ -1,6 +1,10 @@
 package youngNo.payment;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -8,10 +12,18 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import youngNo.payment.Model.*;
 import youngNo.payment.ModelForm.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import youngNo.payment.Database.*;
 
@@ -19,10 +31,12 @@ import youngNo.payment.Database.*;
 public class Controller {
 	private SaveFakeDatabase fakeSave;
 	private FakeDatabase fakeDatabase;
+	private OrderService orderService;
 	
 	public Controller() {
 		fakeSave= new SaveFakeDatabase();
 		fakeDatabase = fakeSave.loadDatabase();
+		this.orderService = new OrderService();
 	}
 	
 	private int getUserId(String token) {
@@ -34,6 +48,7 @@ public class Controller {
 	private ArrayList<Integer> getOrdersIdByUser(int user_id){
 		//fake
 		ArrayList<Integer> orders = new ArrayList<Integer>();
+		/*
 		if (user_id == 1) {
 			orders.add(1); orders.add(2); orders.add(3); 
 		}
@@ -46,6 +61,12 @@ public class Controller {
 		}
 		if (user_id == 4) {
 			orders.add(1); orders.add(28); 
+		}
+		*/
+		
+		JsonNode jNode = orderService.getOrdersByUserId(user_id);
+		for (JsonNode item: jNode) {
+			orders.add(item.get("id").asInt());
 		}
 		
 		return orders;

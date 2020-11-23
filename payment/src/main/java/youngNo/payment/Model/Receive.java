@@ -9,10 +9,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
+import youngNo.payment.*;
+
 public class Receive extends Model{
 	private int id;
 	private String created_date;
 	private int order_id;
+	private double totalPrice=0.0;
 	private ArrayList<Promotion> promotions;
 	
 	public Receive(int id, String created_date, int order_id) {
@@ -20,6 +25,7 @@ public class Receive extends Model{
 		this.setOrder_id(order_id);
 		this.created_date = created_date;
 		this.promotions = new ArrayList<Promotion>();
+		this.totalPrice = Receive.totalPriceCal(order_id);
 	}
 	
 	public Receive(int id, int order_id) {
@@ -69,15 +75,34 @@ public class Receive extends Model{
 		return receives;
 	}
 	
-	
-	
-	//********************
-	private double getNetPayment() {
+	public double getDiscount() {
+		//ยังไม่เสร็จ
+		PromotionService promotionService = new PromotionService();
+		double discount = promotionService.getDiscount(this);
+		
 		//fake
-		return 168.0;
+		return discount;
 	}
 	
+	public static double totalPriceCal(int order_id) {
+		OrderService orderService = new OrderService();
+		JsonNode OrderDetails = orderService.getOrderDetails(order_id);
+		double totalPrice = 0.0;
+		for (JsonNode product: OrderDetails.get("product")) {
+			totalPrice += (product.get("price").asDouble()*product.get("amount").asInt());
+		}
+		
+		return totalPrice;
+	}
 	
+	public double getTaltalPrice() {
+		return this.totalPrice;
+	}
+	
+	//********************
+	public double getNetPayment() {
+		return totalPrice - this.getDiscount();
+	}
 	
 	public void addPromotion(int promotion_id) {
 		Connection conn = null;
