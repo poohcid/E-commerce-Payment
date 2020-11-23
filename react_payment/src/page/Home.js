@@ -10,8 +10,7 @@ const Home = () =>{
             <div className="container">
                 <div style={{marginTop: 70}}>
                     <OrderTable/>
-                </div>
-                
+                </div>               
             </div>
         </React.Fragment>
 

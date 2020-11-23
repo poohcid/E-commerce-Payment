@@ -1,9 +1,27 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import '../App.css';
-import { Link } from "react-router-dom"
-import styled from 'styled-components';
 
-const OrderTable = () =>{
+const ProductListTable = ({orderId, setPrice, price}) =>{
+    const [data, setData] = useState([])
+
+    useEffect(() =>{
+        const ac = new AbortController();
+        console.log(orderId)
+        fetch(`https://ordermodule.herokuapp.com/getOrderDetails/${orderId}`, {
+            method: 'GET',
+            headers: new Headers({
+                'Authorization': '1', 
+                'Content-Type': 'application/json'
+            })
+        })
+        .then((res) => res.json())
+        .then((json) =>{
+            console.log(json)
+            setData(json.product)
+            console.log(data)
+        })
+        return () => ac.abort();
+    }, [])
     const tableStyle= {
         textAlign: "center",
         borderRadius: 5,
@@ -20,18 +38,21 @@ const OrderTable = () =>{
                     <th></th>
                 </tr>
             </thead>
-            <tbody>          
-                <tr>
-                    <td>1</td>
-                    <td>Ryzen 5 5600X</td>
-                    <td>9200</td>
-                    <td>1</td>
-                    <td>9200</td>
-                </tr>
+            <tbody>
+                {data.map((value) => (
+                    <tr key={value.product_id}>
+                        <td>{value.product_id}</td>
+                        <td>{value.productName}</td>
+                        <td>{value.price} บาท</td>
+                        <td>{value.amount} ชิ้น</td>
+                        <td>{value.amount*value.price} บาท</td>
+                    </tr>
+                ))}
+
             </tbody>
         </table>
     );
 }
 
 
-export default OrderTable;
+export default ProductListTable;

@@ -72,6 +72,8 @@ td .nav-link{
 .price-container{
   display: flex;
   justify-content: flex-end;
+  align-items: flex-end;
+  flex-direction: column;
 }
 .navMenu-flex-mobile{
   transition: 0.5s;

@@ -1,9 +1,47 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import '../App.css';
 import { Link } from "react-router-dom"
 import styled from 'styled-components';
 
 const OrderTable = () =>{
+    const [data, setData] = useState([]) 
+    useEffect(() =>{
+        const ac = new AbortController();
+        fetch('http://localhost:8080/receive', {
+            method: 'GET',
+            headers: new Headers({
+                'Authorization': '1', 
+                'Content-Type': 'application/json'
+            })
+        })
+        .then((res) => res.json())
+        .then((json) =>{
+            setData(json)
+        })
+        return () => ac.abort();
+    }, [])
+    const renderData = (value) =>{
+        if(value.created_date === null){
+            return (
+                <tr key={value.id}>
+                    <td>{value.id}</td>
+                    <td>{value.order_id}</td>
+                    <td>{value.netPayment}</td>
+                    <td><Link to={{
+                        pathname: `/Pay/${value.order_id}`,
+                        state:{
+                            taltalPrice: value.taltalPrice,
+                            netPayment: value.netPayment,
+                            discount: value.discount,
+                            promotions: value.promotions
+                        }
+                    }} 
+                    className="nav-link">ชำระเงิน</Link></td>
+                </tr>
+            ) 
+        }
+    }
+
     const tableStyle= {
         textAlign: "center",
         borderRadius: 5,
@@ -18,13 +56,8 @@ const OrderTable = () =>{
                     <th></th>
                 </tr>
             </thead>
-            <tbody>          
-                <tr>
-                    <td>1</td>
-                    <td>order1</td>
-                    <td>50 บาท</td>
-                    <td><Link to="/Pay" className="nav-link">ชำระเงิน</Link></td>
-                </tr>
+            <tbody>   
+                {data.map((value) => renderData(value))}          
             </tbody>
         </table>
     );

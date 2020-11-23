@@ -4,6 +4,7 @@ import Pay from "./page/Pay"
 import Record from "./page/Record"
 import Unpaid from "./page/Unpaid"
 import TopUp from "./page/TopUp"
+import PaymentLog from "./page/PaymentLog"
 import React from 'react';
 import { BrowserRouter, Route } from "react-router-dom"
 import { Provider } from "react-redux";
@@ -33,6 +34,9 @@ function App() {
       </Route>
       <Route exact={true} path='/TopUp'>
         <TopUp/>
+      </Route>
+      <Route exact={true} path='/PaymentLog/:userId'>
+        <PaymentLog/>
       </Route>
     </BrowserRouter>
     </Provider>

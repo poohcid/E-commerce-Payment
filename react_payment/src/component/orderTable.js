@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import '../App.css';
-import { Link,useLocation } from "react-router-dom"
+import Pay from "../page/Pay"
+import { Link, useLocation } from "react-router-dom"
 const OrderTable = () =>{
     const [data, setData] = useState([]) 
     const location = useLocation()
@@ -32,7 +33,16 @@ const OrderTable = () =>{
                     <tr key={value.id}>
                         <td>{value.id}</td>
                         <td>{value.order_id}</td>
-                        <td><Link to={`/Pay/${value.order_id}`} className="nav-link">ชำระเงิน</Link></td>
+                        <td><Link to={{
+                            pathname: `/Pay/${value.order_id}`,
+                            state:{
+                                taltalPrice: value.taltalPrice,
+                                netPayment: value.netPayment,
+                                discount: value.discount,
+                                promotions: value.promotions
+                            }
+                        }} 
+                        className="nav-link">ชำระเงิน</Link></td>
                     </tr>
                 ) 
             }
@@ -43,13 +53,11 @@ const OrderTable = () =>{
                     <tr key={value.id}>
                         <td>{value.id}</td>
                         <td>{value.order_id}</td>
-                        <td><Link to={`/Pay/${value.order_id}`} className="nav-link">ดู</Link></td>
+                        <td><Link to={`/Pay/${value.order_id}`}  className="nav-link">ดู</Link></td>
                     </tr>
                 ) 
             }
-
         }
-        
     }
     return(
         <table style={tableStyle}>

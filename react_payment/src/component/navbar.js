@@ -34,6 +34,7 @@ const Navbar = () =>{
                 <ul className="navMenu-flex">
                     <li><Link to="/Unpaid" className="nav-link">ออเดอร์ที่ค้างชำระ</Link></li>
                     <li><Link to="/Record" className="nav-link">ประวัติการสั่งซื้อ</Link></li>
+                    <LI><Link to={`/PaymentLog/${1}`} className="nav-link">ประวัติการจ่ายเงิน</Link></LI>
                     <li><Link to="/TopUp" className="nav-link">เติมเงิน</Link></li>
                     <li><H2>{balance} บาท</H2></li>
                  </ul>
@@ -44,6 +45,7 @@ const Navbar = () =>{
             <ul className="navMenu-flex-mobile">
                 <LI><Link to="/Unpaid" className="nav-link">ออเดอร์ที่ค้างชำระ</Link></LI>
                 <LI><Link to="/Record" className="nav-link">ประวัติการสั่งซื้อ</Link></LI>
+                <LI><Link to={`/PaymentLog/${1}`} className="nav-link">ประวัติการจ่ายเงิน</Link></LI>
                 <LI><Link to="/TopUp" className="nav-link">เติมเงิน</Link></LI>
                 <LI><H2>{balance} บาท</H2></LI>
             </ul>

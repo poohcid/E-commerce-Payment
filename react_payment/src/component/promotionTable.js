@@ -3,7 +3,7 @@ import '../App.css';
 import { Link } from "react-router-dom"
 import styled from 'styled-components';
 
-const OrderTable = () =>{
+const PromotionTable = ({promotion}) =>{
     const tableStyle= {
         textAlign: "center",
         borderRadius: 5,
@@ -16,15 +16,18 @@ const OrderTable = () =>{
                     <th>ชื่อสินค้า</th>
                 </tr>
             </thead>
-            <tbody>          
-                <tr>
-                    <td>1</td>
-                    <td>Ryzen 5 5600X</td>
-                </tr>
+            <tbody>
+                {/* {promotion.map(() =>{
+                    <tr>
+                        <td>1</td>
+                        <td>Ryzen 5 5600X</td>
+                    </tr>
+                })}          */}
+
             </tbody>
         </table>
     );
 }
 
 
-export default OrderTable;
+export default PromotionTable;
