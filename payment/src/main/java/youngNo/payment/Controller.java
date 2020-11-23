@@ -122,9 +122,12 @@ public class Controller {
 		return new ResponseEntity<Refunding>(refunding, HttpStatus.OK);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/paymentLog/{user_id}")
+	@RequestMapping(method = RequestMethod.GET, value = "/paymentLog")
 	@CrossOrigin(origins = "http://localhost:3000")
-	public ResponseEntity<ArrayList<PaymentLog>> getPaymentLog(@PathVariable("user_id") int user_id){
+	public ResponseEntity<ArrayList<PaymentLog>> getPaymentLog(
+			@RequestHeader("Authorization") String token
+			){
+		int user_id =  this.getUserId(token);
 		Wallet wallet = Wallet.findOne(user_id);
 		ArrayList<PaymentLog> paymentLogs = PaymentLog.findAll(wallet.getId());
 		return new ResponseEntity<ArrayList<PaymentLog>>(paymentLogs, HttpStatus.OK);
