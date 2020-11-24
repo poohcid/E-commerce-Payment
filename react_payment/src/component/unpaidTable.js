@@ -1,16 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import '../App.css';
 import { Link } from "react-router-dom"
+import {useSelector} from 'react-redux'
 import styled from 'styled-components';
 
 const OrderTable = () =>{
     const [data, setData] = useState([]) 
+    const token = useSelector( (state) => state.athorize.id );
     useEffect(() =>{
         const ac = new AbortController();
         fetch('http://localhost:8080/receive', {
             method: 'GET',
             headers: new Headers({
-                'Authorization': '1', 
+                'Authorization': token, 
                 'Content-Type': 'application/json'
             })
         })

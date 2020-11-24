@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import '../App.css';
 import Navbar from "../component/navbar"
 import styled from "styled-components"
@@ -8,7 +8,59 @@ import { topUp } from "../redux/action/balanceAction";
 const TopUp = () =>{
     const balance = useSelector( (state) => state.balance.balance );
     const dispatch = useDispatch();
+    const token = useSelector( (state) => state.athorize.id );
     const [ money, setMoney ] = useState("")
+    const [wallet, setWallet] = useState(0)
+
+    useEffect(() =>{
+        const abort = new AbortController();
+        const signal = abort.signal
+        const url = 'http://localhost:8080/wallet/'
+       fetch(url,{
+            method: 'GET',
+            signal,
+            headers:{
+                'Authorization': token, 
+                'Content-Type': 'application/json',
+            }
+        }).then(async (response) => {
+            if(response.status === 200){
+                const json = await response.json()
+                dispatch(topUp(json.balance));
+                setWallet(json.balance)
+            }
+        })
+        
+        return () => {
+            abort.abort()
+        }
+    }, [])
+
+    const withdraw = async (money) =>{
+        const changeType = Number(money)
+        const signal = new AbortController().signal;
+        const url = 'http://localhost:8080/wallet/addBalance/'
+        const body = {
+            balance: changeType < 0 ? 0:changeType
+          }
+        const response = await fetch(url,{
+            method: 'PUT',
+            body: JSON.stringify(body),
+            signal,
+            headers: {
+                'Authorization': token, 
+                'Content-Type': 'application/json'
+            }
+        })
+        if(response.status === 200){
+            const json = await response.json()
+            dispatch(topUp(json.balance));
+            setWallet(json.balance)
+
+        }
+    }
+
+
     return(
         <React.Fragment>
             <Navbar/>
@@ -17,7 +69,7 @@ const TopUp = () =>{
                 <h1>เติมเงิน</h1>
                 <Input type="number" placeholder="จำนวนเงินที่ต้องการเติม" min={0} value={money} onChange={e => setMoney(e.target.value)}/> <br/>
                 <Button onClick={() => {
-                    dispatch(topUp(balance+parseInt(money)));
+                   withdraw(money)
                 }} disabled={money === ""}>เติมเงิน</Button>
       
                 </center>

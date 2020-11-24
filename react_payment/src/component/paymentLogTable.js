@@ -1,8 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import '../App.css';
+import {useSelector} from 'react-redux'
 
 const OrderTable = () =>{
     const [paymentData, setPaymentData] = useState([])
+    const token = useSelector( (state) => state.athorize.id );
     const tableStyle= {
         textAlign: "center",
         borderRadius: 5,
@@ -10,10 +12,10 @@ const OrderTable = () =>{
 
     useEffect(() =>{
         const ac = new AbortController();
-        fetch('http://localhost:8080/paymentLog/1', {
+        fetch('http://localhost:8080/paymentLog/', {
             method: 'GET',
             headers: new Headers({
-                'Authorization': '1', 
+                'Authorization': token, 
                 'Content-Type': 'application/json'
             })
         })

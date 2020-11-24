@@ -10,13 +10,14 @@ import { topUp } from "../redux/action/balanceAction";
 const Navbar = () =>{
     const [menuEnable, setMenuEnable] = useState(false)
     const balance = useSelector( (state) => state.balance.balance );
+    const token = useSelector( (state) => state.athorize.id );
     const dispatch = useDispatch();
     useEffect(() =>{
         const ac = new AbortController();
         fetch('http://localhost:8080/wallet', {
             method: 'GET',
             headers: new Headers({
-                'Authorization': '1', 
+                'Authorization': token, 
                 'Content-Type': 'application/json'
             })
         })

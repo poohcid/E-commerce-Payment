@@ -10,9 +10,11 @@ import { BrowserRouter, Route } from "react-router-dom"
 import { Provider } from "react-redux";
 import { createStore, combineReducers } from "redux";
 import balanceReducer from "./redux/reducer/balanceReducer";
+import {Reducer} from './redux/reducer/athourize'
 
 const rootReducer = combineReducers({
   balance: balanceReducer,
+  athorize: Reducer
   });
 
   const store = createStore(rootReducer);

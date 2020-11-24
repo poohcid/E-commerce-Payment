@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import '../App.css';
+import {useSelector} from 'react-redux'
 
 const ProductListTable = ({orderId, setPrice, price}) =>{
     const [data, setData] = useState([])
+    const token = useSelector( (state) => state.athorize.id );
 
     useEffect(() =>{
         const ac = new AbortController();
@@ -10,7 +12,7 @@ const ProductListTable = ({orderId, setPrice, price}) =>{
         fetch(`https://ordermodule.herokuapp.com/getOrderDetails/${orderId}`, {
             method: 'GET',
             headers: new Headers({
-                'Authorization': '1', 
+                'Authorization': token, 
                 'Content-Type': 'application/json'
             })
         })

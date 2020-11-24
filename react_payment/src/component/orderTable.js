@@ -2,9 +2,11 @@ import React, {useEffect, useState} from 'react';
 import '../App.css';
 import Pay from "../page/Pay"
 import { Link, useLocation } from "react-router-dom"
+import {useSelector} from 'react-redux'
 const OrderTable = () =>{
     const [data, setData] = useState([]) 
     const location = useLocation()
+    const token = useSelector( (state) => state.athorize.id );
     const tableStyle= {
         textAlign: "center",
         borderRadius: 5,
@@ -15,7 +17,7 @@ const OrderTable = () =>{
         fetch('http://localhost:8080/receive', {
             method: 'GET',
             headers: new Headers({
-                'Authorization': '1', 
+                'Authorization': token, 
                 'Content-Type': 'application/json'
             })
         })

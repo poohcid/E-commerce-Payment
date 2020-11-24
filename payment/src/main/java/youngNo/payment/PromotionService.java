@@ -57,8 +57,8 @@ public class PromotionService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
-			return totalDiscount;
-			//return receive.getPromotions().size()*100;
+			//return totalDiscount;
+			return receive.getPromotions().size()*100;
 		}
 	}
 }
