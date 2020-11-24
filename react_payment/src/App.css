@@ -95,6 +95,10 @@ td .nav-link{
   padding: 0;
 }
 
+.promotionRow{
+  display: -webkit-inline-box;
+}
+
 
 .navMenu-flex-mobile .nav-link{
   font-size: 18px;

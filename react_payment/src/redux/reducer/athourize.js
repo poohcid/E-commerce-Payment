@@ -1,19 +1,18 @@
-const type = "SAVE"
+const type = "SAVE";
 
 const init = {
-    id: "14"
-}
+  id: "100",
+};
 
 export const Action = (id) => {
-    return {type:type, id}
-}
+  return { type: type, id };
+};
 
-export const Reducer = (state = init, action) =>{
-    switch(action.type){
-        case type:
-            return {id:action.id}
-        default:
-            return state
-    }
-
-}
+export const Reducer = (state = init, action) => {
+  switch (action.type) {
+    case type:
+      return { id: action.id };
+    default:
+      return state;
+  }
+};
