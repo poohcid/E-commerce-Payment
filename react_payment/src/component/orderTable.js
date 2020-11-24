@@ -41,7 +41,8 @@ const OrderTable = () =>{
                                 taltalPrice: value.taltalPrice,
                                 netPayment: value.netPayment,
                                 discount: value.discount,
-                                promotions: value.promotions
+                                promotions: value.promotions,
+                                date: value.created_date
                             }
                         }} 
                         className="nav-link">ชำระเงิน</Link></td>
@@ -61,7 +62,8 @@ const OrderTable = () =>{
                                 taltalPrice: value.taltalPrice,
                                 netPayment: value.netPayment,
                                 discount: value.discount,
-                                promotions: value.promotions
+                                promotions: value.promotions,
+                                date: value.created_date
                             }
                         }}  className="nav-link">ดู</Link></td>
                     </tr>

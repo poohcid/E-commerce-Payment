@@ -10,9 +10,9 @@ import { useSelector } from "react-redux";
 const Pay = () =>{
     const location = useLocation()
     const { orderId } = useParams();
-    const {netPayment, taltalPrice, discount, promotions} = location.state
+    const {netPayment, taltalPrice, discount, promotions, date} = location.state
     const token = useSelector( (state) => state.athorize.id );
-
+    console.log(date)
     const paid = async (orderId) =>{
         const url = 'http://localhost:8080/pay'
         const body = {order_id:orderId}
@@ -26,7 +26,7 @@ const Pay = () =>{
         })
         if(response.status === 200 ){
             const json = await response.json()
-            console.log(json)
+            console.log(json, "PAID")
         }
     }
 
@@ -46,7 +46,7 @@ const Pay = () =>{
                     <h2>ส่วนลดจากโปรโมชั่น : {discount} บาท</h2>
                     <h2>ราคาสุทธิ : {netPayment} บาท</h2>
                 </div>
-                <button onClick={() => paid(orderId)}>จ่ายเงิน</button>
+                {!date && <button onClick={() => paid(orderId)}>จ่ายเงิน</button>}
             </div>
         </React.Fragment>
     );
