@@ -55,7 +55,15 @@ const OrderTable = () =>{
                     <tr key={value.id}>
                         <td>{value.id}</td>
                         <td>{value.order_id}</td>
-                        <td><Link to={`/Pay/${value.order_id}`}  className="nav-link">ดู</Link></td>
+                        <td><Link to={{
+                            pathname: `/Pay/${value.order_id}`,
+                            state:{
+                                taltalPrice: value.taltalPrice,
+                                netPayment: value.netPayment,
+                                discount: value.discount,
+                                promotions: value.promotions
+                            }
+                        }}  className="nav-link">ดู</Link></td>
                     </tr>
                 ) 
             }

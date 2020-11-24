@@ -13,7 +13,7 @@ const PromotionTable = ({promotion}) =>{
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>ชื่อสินค้า</th>
+                    <th>รหัสโปรโมชั่น</th>
                 </tr>
             </thead>
             <tbody>

@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { topUp } from "../redux/action/balanceAction";
 
 const TopUp = () =>{
-    const balance = useSelector( (state) => state.balance.balance );
     const dispatch = useDispatch();
     const token = useSelector( (state) => state.athorize.id );
     const [ money, setMoney ] = useState("")
