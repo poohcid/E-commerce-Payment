@@ -6,6 +6,7 @@ import PromotionTable from "../component/promotionTable"
 import { useParams } from "react-router-dom"
 import { Link, useLocation } from "react-router-dom"
 import { useSelector } from "react-redux";
+import styled from "styled-components"
 
 const Pay = () =>{
     const location = useLocation()
@@ -45,11 +46,26 @@ const Pay = () =>{
                 <div className="price-container">
                     <h2>ส่วนลดจากโปรโมชั่น : {discount} บาท</h2>
                     <h2>ราคาสุทธิ : {netPayment} บาท</h2>
+                    {!date && <Button onClick={() => paid(orderId)}>จ่ายเงิน</Button>}
                 </div>
-                {!date && <button onClick={() => paid(orderId)}>จ่ายเงิน</button>}
+                
             </div>
         </React.Fragment>
     );
 }
 
+
+const Button = styled.button`
+    padding: 10px 25px;
+    border: none;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    background-image: linear-gradient(to right top, #051937, #004267, #006d76, #00965a, #87b51f);
+    border-radius: 10px;
+    font-family: 'Mitr', sans-serif;
+    margin: 20px;
+    font-size: 18px;
+    color: #FFF;
+    outline: none;
+    cursor: pointer;
+`
 export default Pay;
