@@ -8,7 +8,6 @@ const ProductListTable = ({orderId, setPrice, price}) =>{
 
     useEffect(() =>{
         const ac = new AbortController();
-        console.log(orderId)
         fetch(`https://ordermodule.herokuapp.com/getOrderDetails/${orderId}`, {
             method: 'GET',
             headers: new Headers({
@@ -18,9 +17,7 @@ const ProductListTable = ({orderId, setPrice, price}) =>{
         })
         .then((res) => res.json())
         .then((json) =>{
-            console.log(json)
             setData(json.product)
-            console.log(data)
         })
         return () => ac.abort();
     }, [])
