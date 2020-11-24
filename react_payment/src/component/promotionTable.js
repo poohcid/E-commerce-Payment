@@ -3,7 +3,7 @@ import "../App.css";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
-const PromotionTable = ({ promotions, orderId, token }) => {
+const PromotionTable = ({ promotions, orderId, token, setPro,setDisCountLo, setNetPaymentLo }) => {
   const tableStyle = {
     textAlign: "center",
     borderRadius: 5,
@@ -25,6 +25,9 @@ const PromotionTable = ({ promotions, orderId, token }) => {
     });
     if (response.status === 200) {
       const json = await response.json();
+      setPro(json.promotions)
+      setDisCountLo(json.discount)
+      setNetPaymentLo(json.netPayment)
       console.log(json, "Add Promotion");
     }
   };

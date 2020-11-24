@@ -1,7 +1,7 @@
 const type = "SAVE";
 
 const init = {
-  id: "100",
+  id: "1",
 };
 
 export const Action = (id) => {

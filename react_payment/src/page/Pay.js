@@ -7,7 +7,6 @@ import { useParams } from "react-router-dom";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
-import styled from "styled-components";
 
 const Pay = () => {
   const location = useLocation();
@@ -84,7 +83,7 @@ const Pay = () => {
           </div>
         </div>
 
-        <PromotionTable promotions={pro} orderId={orderId} token={token} />
+        <PromotionTable promotions={pro} orderId={orderId} token={token} setPro={setPro} setDisCountLo={setDisCountLo} setNetPaymentLo={setNetPaymentLo} />
         <div className="price-container">
           <h2>ส่วนลดจากโปรโมชั่น : {discountLo} บาท</h2>
           <h2>ราคาสุทธิ : {netPaymentLo} บาท</h2>

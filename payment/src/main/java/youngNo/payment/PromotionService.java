@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import youngNo.payment.Model.*;
 
 public class PromotionService {
-	private final String url="http://localhost:8081/";
+	private final String url="https://2139426969a7.ngrok.io/";
 	private HttpHeaders headers;
 	private HttpEntity<String> entityHeader;
 	private RestTemplate restTemplate;
@@ -36,12 +36,15 @@ public class PromotionService {
 		ObjectMapper mapper;
 		JsonNode actualObj;
 		String responseText;
+		
 		try {
 			for (Promotion promotion: receive.getPromotions()) {
 				responseText = restTemplate.exchange(
-						url+"promotion/"+promotion.getPromotion_id(), HttpMethod.GET, entityHeader, String.class).getBody();
+						url+"promotion/apply/"+promotion.getPromotion_id(), HttpMethod.GET, entityHeader, String.class).getBody();
 				mapper = new ObjectMapper();
 				actualObj = mapper.readTree(responseText);
+				System.out.println(responseText);
+				
 				if (actualObj.get("method").asText().equals("percent")) {
 					totalDiscount += totalPrice*(actualObj.get("amount").asDouble()/100);
 				}
@@ -57,8 +60,8 @@ public class PromotionService {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally {
-			//return totalDiscount;
-			return receive.getPromotions().size()*100;
+			return totalDiscount;
+			//return receive.getPromotions().size()*100;
 		}
 	}
 }
