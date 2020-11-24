@@ -15,4 +15,4 @@ Payment Module คำนวนการสั่งซื้อสินค้�
 
 ## Diagram
 
-![alt text](https://raw.githubusercontent.com/poohcid/E-commerce-Payment/main/Untitled%20Diagram.png)
+![alt text](https://raw.githubusercontent.com/poohcid/E-commerce-Payment/main/serviceDiagram.png)
